@@ -367,7 +367,7 @@ async function checkDecision() {
     if (pendingAction === action && $("decision-dialog").open) {
       decisionChecking = false;
       updateDecisionHelp();
-      if (!$("decision-check").hidden) $("save-decision").disabled = true;
+      if (!$("decision-check").hidden) { $("save-decision").disabled = true; $("decision-readiness").textContent = "Could not check readiness. Retry to continue."; }
     }
   }
 }

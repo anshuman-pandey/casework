@@ -181,6 +181,21 @@ const { execFileSync } = require("node:child_process");
       .getByText(/Juniper Studio is a fictional design business/)
       .waitFor();
     assert.equal(await page.locator(".technical-details").first().getAttribute("open"), null);
+    // A failed automatic check preserves the accepted suggestion and offers one retry.
+    await page.evaluate(() => {
+      const original = caseworkDemo.request;
+      let fail = true;
+      caseworkDemo.request = async (...args) => {
+        if (fail && args[0].endsWith("/evaluate")) { fail = false; throw new Error("Temporary check failure"); }
+        return original(...args);
+      };
+    });
+    await page.getByRole("button", {name: "Review & close", exact: true}).click();
+    await page.getByText("Temporary check failure", {exact: true}).waitFor();
+    assert.equal(await page.locator("#save-decision").isDisabled(), true);
+    await page.getByRole("button", {name:"Retry check",exact:true}).click();
+    await page.getByText("✓ Checks passed. Ready to record.").waitFor();
+    await page.getByRole("button", {name:"Cancel decision",exact:true}).click();
     await page.getByRole("button", {name: "Review & close", exact: true}).click();
     // No typing, manual check, disclosure, or extra focus click is needed.
     assert.equal(await page.locator("#reason").evaluate(el => document.activeElement === el), true);

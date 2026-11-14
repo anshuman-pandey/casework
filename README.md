@@ -77,7 +77,7 @@ git clone https://github.com/anshuman-pandey/casework.git "$HOME/casework"; if (
 
 </details>
 
-Your first investigation: **inspect evidence → run the policy check → record your rationale → download the case record**. Reopen the case to see that its earlier history remains.
+Your first investigation: **open the sample → Record a decision → Tab to accept the complete sample rationale → Record decision**. Checks run automatically. Inspect evidence or edit the rationale whenever you want; download the record after saving. Reopen the case to see that its earlier history remains.
 
 ![Getting started: one guided investigation and five additional sample paths](docs/assets/demo-start.png)
 
