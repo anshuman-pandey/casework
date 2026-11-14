@@ -112,7 +112,7 @@ These cover the **implemented workflow**, including blocked paths. They do not s
 
 Notion and Linear are our explicit quality references: a readable case document, quiet navigation, consistent controls and fast keyboard interaction. [Our design standard](docs/design.md) links the primary research and the rules we apply.
 
-Use **Ctrl/Cmd+K** for cases and commands, **/** for queue search, and **J/K** for case navigation. Copy case links, use browser Back/Forward, inspect evidence without losing expansion state, and keep rationale drafts during the session. Light/dark appearance is remembered locally. Fonts and icons are bundled; the application does not call a CDN or send telemetry.
+Use **Ctrl/Cmd+K** for cases and commands, **/** for queue search, and **J/K** for case navigation. Copy case links, use browser Back/Forward, inspect evidence without losing expansion state, and keep rationale drafts during the session. Dark appearance is the default; your light/dark choice is remembered locally. Fonts and icons are bundled; the application does not call a CDN or send telemetry.
 
 ![Casework investigation workspace](docs/assets/demo-case.png)
 
@@ -134,6 +134,8 @@ Use **Ctrl/Cmd+K** for cases and commands, **/** for queue search, and **J/K** f
 The original code is **Apache-2.0**, with no feature keys or per-seat limits. Security and enterprise controls belong in the free distribution when implemented. Infrastructure, licensed datasets and optional model inference can still cost money. “Casework” remains a provisional product name.
 
 ## Bring in a synthetic alert
+
+**Import alert** turns a monitoring-system alert into a case with its source records and decision history. Pick an editable sample for repeated payments, high source risk, or missing screening evidence. The sample uses your workspace name. In the public demo, imports stay in your browser; self-hosted API imports are stored in SQLite. There is no automatic vendor connector yet.
 
 Generate a complete alert with fresh timestamps, save it once, and send it to the running app:
 
