@@ -1,0 +1,155 @@
+{
+  "id": "caseworkSyntheticImport",
+  "name": "Create and replay a synthetic alert in Casework",
+  "active": false,
+  "nodes": [
+    {
+      "id": "6180fc73-fb8b-48e6-97c7-d6e479ecaeb3",
+      "name": "Run this example",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "parameters": {},
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "99cd489d-7e6d-41db-b115-a7ce6ef7951a",
+      "name": "Build synthetic alert",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ JSON.stringify({ base_url: 'http://127.0.0.1:8080', alert: { source_id: 'n8n-practice-' + $execution.id, subject: 'Acme Corp', title: 'Repeated supplier payments require review', category: 'Transaction monitoring', risk: 18, evidence: [ {kind:'identity',label:'Customer profile',source:'n8n synthetic fixture',detail:'Fictional business with expected monthly volume of USD 5,000.',observed_at:$now.toISO()}, {kind:'transactions',label:'Transaction extract',source:'n8n synthetic fixture',detail:'Three fictional supplier payments: USD 250, USD 280 and USD 310.',observed_at:$now.toISO()}, {kind:'screening',label:'Screening snapshot',source:'n8n synthetic fixture',detail:'Demonstration record only. No sanctions provider was queried.',observed_at:$now.toISO()} ] } }) }}",
+        "options": {}
+      },
+      "position": [
+        250,
+        0
+      ]
+    },
+    {
+      "id": "37e70741-922d-47ae-a9d7-9d3de0c04d67",
+      "name": "Create case",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Build synthetic alert').first().json.base_url + '/api/alerts' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('Build synthetic alert').first().json.alert) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "position": [
+        500,
+        0
+      ]
+    },
+    {
+      "id": "bbb3ad40-9dea-4a77-aee9-a9683fbd6a3a",
+      "name": "Replay same alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Build synthetic alert').first().json.base_url + '/api/alerts' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('Build synthetic alert').first().json.alert) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "position": [
+        750,
+        0
+      ]
+    },
+    {
+      "id": "eb1f5f05-ad3f-472c-b733-b2033a9851df",
+      "name": "Read case record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "parameters": {
+        "url": "={{ $('Build synthetic alert').first().json.base_url + '/api/cases/' + $json.id + '/export' }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "position": [
+        1000,
+        0
+      ]
+    },
+    {
+      "id": "0c16d02f-1f88-4611-950b-8d2412f9c195",
+      "name": "Setup and expected result",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "parameters": {
+        "content": "## Synthetic alert \u2192 one reviewable case\nRun Casework locally on port 8080, then execute this workflow in n8n on the same host. No credentials needed.\n\nCreate case: created=true. Replay: same ID, created=false. Final node: case record with three sources. No evaluation or decision is automated.\n\nThe public browser demo has no API. Do not point this workflow at it. n8n Cloud cannot reach your loopback server.\n\nhttps://github.com/anshuman-pandey/casework/tree/main/examples/n8n",
+        "height": 300,
+        "width": 700
+      },
+      "position": [
+        220,
+        -340
+      ]
+    }
+  ],
+  "connections": {
+    "Run this example": {
+      "main": [
+        [
+          {
+            "node": "Build synthetic alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build synthetic alert": {
+      "main": [
+        [
+          {
+            "node": "Create case",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create case": {
+      "main": [
+        [
+          {
+            "node": "Replay same alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replay same alert": {
+      "main": [
+        [
+          {
+            "node": "Read case record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5b93f78f-3af8-415d-82c4-b68e5aabbffa",
+  "tags": []
+}

@@ -1,0 +1,44 @@
+diff --git a/README.md b/README.md
+index 93b8d09..c3215ce 100644
+--- a/README.md
++++ b/README.md
+@@ -1513,6 +1513,14 @@ Splitwise: paid SaaS product.
+ | [spliit](https://github.com/spliit-app/spliit) | Free and Open Source Alternative to Splitwise. Share expenses with your friends and family. | MIT | ★ 3.0k |
+ | [split-pro](https://github.com/oss-apps/split-pro) | Open source alternative to Splitwise | MIT | ★ 1.5k |
+ 
++### Unit21
++
++Fraud and AML risk management, transaction monitoring and case management.
++
++| Alternative | Description | License | Stars |
++|---|---|---|---|
++| [Casework](https://github.com/anshuman-pandey/casework) | Fraud and AML case-management developer preview with synthetic investigations, evidence review, decision history and JSON exports. | Apache-2.0 |  |
++
+ ## Video
+ 
+ ### Loom
+diff --git a/data.json b/data.json
+index 6815edc..fa15298 100644
+--- a/data.json
++++ b/data.json
+@@ -3340,5 +3340,19 @@
+     "description": "Self-hosted app that turns your RSS feed's posts into short vertical videos for about $0.06 each, held for review, then scheduled via Postiz or Publer."
+    }
+   ]
+- }
++ },
++{
++ "slug": "unit21",
++ "name": "Unit21",
++ "category": "Finance",
++ "description": "Fraud and AML risk management, transaction monitoring and case management.",
++ "alternatives": [
++  {
++   "name": "Casework",
++   "repo": "anshuman-pandey/casework",
++   "license": "Apache-2.0",
++   "description": "Fraud and AML case-management developer preview with synthetic investigations, evidence review, decision history and JSON exports."
++  }
++ ]
++}
+ ]

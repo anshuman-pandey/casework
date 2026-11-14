@@ -146,7 +146,7 @@ curl http://127.0.0.1:8080/api/alerts \
   --data-binary @sample-alert.json
 ```
 
-Replay the same file and the original case ID is returned. Reuse that source ID with changed content and the API returns `409`. The static [minimal example](examples/alert.json) intentionally contains no evidence, so it imports but cannot close. [API contract →](docs/api.md)
+Replay the same file and the original case ID is returned. Reuse that source ID with changed content and the API returns `409`. The static [minimal example](examples/alert.json) intentionally contains no evidence, so it imports but cannot close. [API contract →](docs/api.md) · [Tested n8n import workflow →](examples/n8n/README.md)
 
 To exercise every scenario and the import/replay path against a running sandbox:
 

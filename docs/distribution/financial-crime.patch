@@ -1,0 +1,13 @@
+diff --git a/README.md b/README.md
+index 0429af6..e814fc2 100644
+--- a/README.md
++++ b/README.md
+@@ -149,6 +149,8 @@ Tools and data sources for identifying financial crime risks through news monito
+ 
+ ## Case Management & Investigation
+ 
++- Casework - Apache-2.0 case-management developer preview for synthetic fraud and AML investigations, with evidence review, decision history and JSON exports. [![Website](https://img.shields.io/badge/Website-Link-2F80ED)](https://casework-live.sunshinevendetta.chatgpt.site) [![Code](https://img.shields.io/badge/Code-GitHub-2DA44E)](https://github.com/anshuman-pandey/casework)
++
+ - Kibana/Elasticsearch - Query, pivot and visualize alert context. [![Code](https://img.shields.io/badge/Code-Kibana-2DA44E)](https://github.com/elastic/kibana) [![Code](https://img.shields.io/badge/Code-Elasticsearch-2DA44E)](https://github.com/elastic/elasticsearch)
+ 
+ - OpenSearch - Elastic alternative for investigations. [![Code](https://img.shields.io/badge/Code-GitHub-2DA44E)](https://github.com/opensearch-project/OpenSearch)
