@@ -67,6 +67,9 @@ const { execFileSync } = require("node:child_process");
         apiRequests.push(r.url());
     });
     await page.goto(base);
+    await page.getByRole("button", {name: "Switch to light appearance", exact: true}).waitFor();
+    assert.equal(await page.locator("html").getAttribute("data-theme"), "dark");
+    await page.getByRole("button", {name: "Switch to light appearance", exact: true}).click();
     await page
       .getByRole("button", { name: "Start guided investigation", exact: true })
       .waitFor();
@@ -127,7 +130,7 @@ const { execFileSync } = require("node:child_process");
       .waitFor();
     assert.equal(
       await visitor.locator("[data-workspace-name]").first().textContent(),
-      "Sandbox",
+      "Acme Corp",
     );
     await visitor
       .getByRole("button", { name: "Make it yours", exact: true })
@@ -177,12 +180,18 @@ const { execFileSync } = require("node:child_process");
     await page
       .getByText(/Juniper Studio is a fictional design business/)
       .waitFor();
-    await page
-      .getByRole("button", { name: "Run policy check", exact: true })
-      .click();
-    await page
-      .getByRole("button", { name: "Record a decision", exact: true })
-      .click();
+    assert.equal(await page.locator(".technical-details").first().getAttribute("open"), null);
+    await page.getByRole("button", {name: "Review & close", exact: true}).click();
+    assert.equal(await page.locator("#save-decision").isDisabled(), true);
+    await page.getByLabel("Decision rationale").focus();
+    await page.keyboard.press("Tab");
+    assert.match(await page.getByLabel("Decision rationale").inputValue(), /Juniper Studio/);
+    await page.getByRole("button", {name: "Check readiness to close", exact: true}).click();
+    await page.getByText(/All three readiness checks pass/).waitFor();
+    assert.equal(await page.locator("#save-decision").isEnabled(), true);
+    await page.locator("#save-decision").click();
+    await page.getByText(/Replace the bracketed prompt/).waitFor();
+    await page.screenshot({path:path.join(root,"test-results/demo-decision.png")});
     await page
       .getByLabel("Decision rationale")
       .fill(
@@ -224,7 +233,7 @@ const { execFileSync } = require("node:child_process");
       .waitFor();
     assert.match(
       await page.locator("#version-download").getAttribute("href"),
-      /v0\.2\.0-preview\.1\.zip$/,
+      /v0\.2\.0-preview\.2\.zip$/,
     );
     await page.getByRole("button", { name: "Close self-host guide" }).click();
     await page.locator("#toast").waitFor({ state: "hidden" });
@@ -271,6 +280,16 @@ const { execFileSync } = require("node:child_process");
           fullPage: true,
         });
     }
+    await page.getByRole("button", {name:"Import alert", exact:true}).click();
+    const sample = JSON.parse(await page.locator("#alert-json").inputValue());
+    assert.equal(sample.subject, "Orbit Pay"); assert.equal(sample.evidence.length, 3);
+    await page.getByLabel("Start from a scenario").selectOption("missing");
+    assert.equal(JSON.parse(await page.locator("#alert-json").inputValue()).evidence.length, 2);
+    await page.getByLabel("Start from a scenario").selectOption("risk");
+    assert.equal(JSON.parse(await page.locator("#alert-json").inputValue()).risk, 89);
+    await page.getByLabel("Start from a scenario").selectOption("payments");
+    await page.getByRole("button",{name:"Validate & import",exact:true}).click();
+    await page.getByRole("heading",{name:"Orbit Pay",exact:true}).waitFor();
     assert.deepEqual(errors, []);
     assert.deepEqual(apiRequests, []);
     console.log(

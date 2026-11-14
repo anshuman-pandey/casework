@@ -44,7 +44,7 @@
       >
         <span class="avatar" data-workspace-logo>S</span>
         <div>
-          <span data-workspace-name>Sandbox</span
+          <span data-workspace-name>Acme Corp</span
           ><small id="workspace-mode">Development workspace</small>
         </div>
         <span
@@ -97,7 +97,7 @@
       <header class="topbar">
         <div class="breadcrumb">
           <span data-icon="layers"></span>
-          <span data-workspace-name>Sandbox</span> <span class="slash">/</span>
+          <span data-workspace-name>Acme Corp</span> <span class="slash">/</span>
           <strong>Investigations</strong>
         </div>
         <div class="topbar-actions">
@@ -269,10 +269,9 @@
           ></button>
         </div>
         <p>
-          Paste a synthetic JSON alert. Reusing a source ID with the same
-          content is safe.
+          Turn an alert from your monitoring system into an investigation with evidence and decision history. Try a complete synthetic example, then edit it. Matching source IDs prevent duplicate imports.
         </p>
-        <label for="alert-json">Alert JSON</label
+        <label for="import-scenario">Start from a scenario</label><select id="import-scenario"><option value="payments">Repeated supplier payments</option><option value="risk">High-risk activity</option><option value="missing">Missing screening evidence</option></select><p class="suggestion-note">Changing the scenario replaces the JSON below. Review it before importing.</p><label for="alert-json">Alert JSON</label
         ><textarea
           id="alert-json"
           rows="15"
@@ -295,7 +294,7 @@
             data-icon="x"
           ></button>
         </div>
-        <p id="decision-description"></p>
+        <p id="decision-description"></p><div class="decision-readiness"><p id="decision-readiness" role="status"></p><button type="button" class="button" id="decision-check">Check readiness to close</button></div><div class="rationale-starter"><strong>A starting point for your rationale</strong><p id="rationale-preview"></p><button type="button" class="button" id="use-rationale">Use this draft</button><p class="suggestion-note">Based on this record, not an AI finding. Edit it to reflect your review. Focus the empty rationale and press Tab to insert.</p></div>
         <label for="reason">Decision rationale</label
         ><textarea
           id="reason"
@@ -305,7 +304,7 @@
           placeholder="Explain what you reviewed and why this action is appropriate."
         ></textarea>
         <p id="decision-error" class="error" role="alert"></p>
-        <button class="button primary" type="submit">Record decision</button>
+        <button id="save-decision" class="button primary" type="submit">Record decision</button>
       </form>
     </dialog>
     <dialog id="workspace-dialog" aria-labelledby="workspace-title">

@@ -198,7 +198,7 @@ function renderDetail() {
   const evaluation = c.events
     .filter(
       (e) =>
-        e.kind === "policy_evaluated" && e.payload.case_version === c.version,
+        e.kind === "policy_evaluated" && e.payload.case_version === (c.status === "open" ? c.version : c.version - 1),
     )
     .at(-1)?.payload;
   const passed = evaluation?.checks.filter((check) => check.passed).length || 0;
@@ -213,7 +213,7 @@ function renderDetail() {
       <div class="document-heading"><span class="eyebrow">Investigation</span><h3>${escape(c.subject)}</h3><p class="document-subtitle">${escape(c.category)}<span class="middle-dot">·</span>Created ${escape(date(c.created_at))}</p></div>
       <div class="trigger"><span class="trigger-icon">${icon("flag")}</span><div><span class="trigger-label">Why this case was opened</span><p>${escape(c.title)}</p></div></div>
       <div class="section-label">${icon("folder")} Evidence <span class="section-count">${c.evidence.length}</span><span class="section-note">Source records</span></div>
-      <div class="evidence-grid">${c.evidence.length ? c.evidence.map((e) => `<details class="evidence" data-evidence="${escape(e.id)}" ${expandedEvidence.get(c.id)?.has(e.id) ? "open" : ""}><summary><span class="evidence-icon">${icon(e.kind === "identity" ? "contact" : e.kind === "transactions" ? "receipt" : "shield")}</span><span class="evidence-summary"><strong>${escape(e.label)}</strong><span>${escape(e.source)}</span></span><span class="evidence-kind">${escape(e.kind)}</span>${icon("chevron-right")}</summary><div class="evidence-content"><p>${escape(e.detail)}</p><dl class="evidence-meta"><div><dt>Reference</dt><dd>${escape(e.id)}</dd></div><div><dt>Observed</dt><dd>${escape(e.observed_at)}</dd></div><div><dt>SHA-256</dt><dd>${escape(e.sha256)}</dd></div></dl></div></details>`).join("") : `<div class="empty-evidence">${icon("folder")}<strong>No evidence attached</strong><p>This case needs source records before it can be evaluated for closure.</p></div>`}</div>
+      <div class="evidence-grid">${c.evidence.length ? c.evidence.map((e) => `<details class="evidence" data-evidence="${escape(e.id)}" ${expandedEvidence.get(c.id)?.has(e.id) ? "open" : ""}><summary><span class="evidence-icon">${icon(e.kind === "identity" ? "contact" : e.kind === "transactions" ? "receipt" : "shield")}</span><span class="evidence-summary"><strong>${escape(e.label)}</strong><span>${escape(e.source)}</span></span><span class="evidence-kind">${escape(e.kind)}</span>${icon("chevron-right")}</summary><div class="evidence-content"><p>${escape(e.detail)}</p><dl class="evidence-meta"><div><dt>Reference</dt><dd>${escape(e.id)}</dd></div><div><dt>Observed</dt><dd>${escape(e.observed_at)}</dd></div></dl><details class="technical-details"><summary>Technical details</summary><p>Content fingerprint (SHA-256). Useful when comparing exports; it does not verify the source or establish independent audit integrity.</p><code>${escape(e.sha256)}</code></details></div></details>`).join("") : `<div class="empty-evidence">${icon("folder")}<strong>No evidence attached</strong><p>This case needs source records before it can be evaluated for closure.</p></div>`}</div>
       <div class="policy-box"><div class="policy-head"><div class="policy-title"><span class="policy-icon">${icon("shield-check")}</span><div><strong>Evidence readiness</strong><span>Demo policy · human review required</span></div></div>${evaluation ? `<span class="evaluation-status ${passed === 3 ? "passed" : "blocked"}">${icon(passed === 3 ? "check-circle" : "circle")}${passed} of 3 checks passed</span>` : '<span class="evaluation-status">Not evaluated</span>'}</div>
         ${evaluation ? `<div class="checks">${evaluation.checks.map((check) => `<div class="check ${check.passed ? "" : "fail"}">${icon(check.passed ? "check-circle" : "circle")}<span>${escape(check.label)}</span></div>`).join("")}</div><p class="policy-explanation">${escape(evaluation.explanation)}</p>` : '<p class="policy-explanation">Check evidence coverage, freshness and the source risk threshold. This does not verify evidence content or determine whether activity is suspicious.</p>'}
         <div class="policy-footer"><span>${icon("lock")} Deterministic checks</span>${c.status === "open" ? `<button id="evaluate" class="button">${icon("play")}Run policy check</button>` : '<span class="pill">Decision recorded</span>'}</div>
@@ -312,13 +312,49 @@ function renderDetail() {
               : "Your rationale will be saved in the case history.";
           $("reason").value = drafts.get(c.id) || "";
           $("decision-error").textContent = "";
+          updateDecisionHelp();
           $("decision-dialog").showModal();
         }),
     );
 }
+function updateDecisionHelp() {
+  const check = current.events.filter(e => e.kind === "policy_evaluated" && e.payload.case_version === current.version).at(-1)?.payload;
+  const closing = pendingAction.action === "close";
+  const blocked = check?.checks.filter(c => !c.passed) || [];
+  $("decision-check").hidden = !closing;
+  $("decision-readiness").textContent = !closing ? "Your reason will be added to the case history." : !check ? "First, check evidence coverage, freshness and source risk. You can do that here without losing your draft." : blocked.length ? "Closure is blocked. Unmet requirements: " + blocked.map(c => c.label).join("; ") + ". Cancel and escalate for further review." : "All three readiness checks pass. Review the sources and your rationale before recording a decision.";
+  $("save-decision").disabled = closing && (!check || blocked.length > 0);
+  const labels = current.evidence.map(e => e.label).join(", ") || "no attached source records";
+  const facts = `Case: ${current.subject}. Alert: ${current.title}. Attached evidence: ${labels}. `;
+  const outcome = pendingAction.action === "reopen" ? "Reopening for further review. Follow-up needed: [describe what needs to be checked]." : pendingAction.action === "escalate" ? `Escalating for further review. ${blocked.length ? "Readiness blockers: " + blocked.map(c => c.label).join("; ") + ". " : ""}Reason and requested follow-up: [add your findings].` : `${check && !blocked.length ? "The recorded checks passed for evidence coverage, freshness and source risk. " : "Readiness checks must pass before closure. "}These checks do not establish that the activity is legitimate. My evidence-based reason for closing: [add your findings].`;
+  $("rationale-preview").textContent = facts + outcome;
+}
+function useRationale() {
+  if ($("reason").value.trim()) { toast("Clear your rationale first to use the suggested draft."); return; }
+  $("reason").value = $("rationale-preview").textContent;
+  $("reason").dispatchEvent(new Event("input"));
+  $("reason").focus();
+  const start = $("reason").value.indexOf("[");
+  if (start >= 0) $("reason").setSelectionRange(start, $("reason").value.indexOf("]", start) + 1);
+}
+$("use-rationale").onclick = useRationale;
+$("reason").addEventListener("keydown", event => {
+  if (event.key === "Tab" && !event.shiftKey && !$("reason").value.trim()) { event.preventDefault(); useRationale(); }
+});
+$("decision-check").onclick = async () => {
+  $("decision-check").disabled = true;
+  $("decision-error").textContent = "";
+  try {
+    await api(`/api/cases/${encodeURIComponent(pendingAction.id)}/evaluate`, {});
+    await loadCase(pendingAction.id, false);
+    updateDecisionHelp();
+  } catch (error) { $("decision-error").textContent = error.message; }
+  finally { $("decision-check").disabled = false; }
+};
 $("decision-form").onsubmit = async (event) => {
   event.preventDefault();
   const submit = event.submitter;
+  if (/\[(?:add your findings|describe what needs to be checked)\]/.test($("reason").value)) { $("decision-error").textContent = "Replace the bracketed prompt with your own findings before recording."; return; }
   submit.disabled = true;
   try {
     const result = await api(
@@ -374,19 +410,22 @@ $("status-filter").onchange = renderQueue;
       renderQueue();
     }),
 );
+function fillImportScenario() {
+  const choice = $("import-scenario").value;
+  const subject = window.caseworkWorkspace.get().name;
+  const observed_at = new Date().toISOString();
+  const evidence = [
+    {kind: "identity", label: "Customer profile", source: "Synthetic customer ledger", detail: `${subject} is a fictional business used for this sample. Expected monthly payment volume: USD 5,000.`, observed_at},
+    {kind: "transactions", label: "Transaction extract", source: "Synthetic payment ledger", detail: "Three fictional supplier payments of USD 250, USD 280 and USD 310 triggered a repeated-payment alert. These amounts alone do not establish legitimacy.", observed_at},
+    {kind: "screening", label: "Screening snapshot", source: "Synthetic screening fixture", detail: "Demo source record. No sanctions or watchlist service was queried.", observed_at}
+  ];
+  if (choice === "missing") evidence.pop();
+  $("alert-json").value = JSON.stringify({source_id: `sandbox-${crypto.randomUUID()}`, subject, title: choice === "risk" ? "High source risk requires investigation" : "Repeated supplier payments require review", category: "Transaction monitoring", risk: choice === "risk" ? 89 : 18, evidence}, null, 2);
+}
+$("import-scenario").onchange = fillImportScenario;
 $("import-button").onclick = () => {
-  $("alert-json").value = JSON.stringify(
-    {
-      source_id: `sandbox-${Date.now()}`,
-      subject: "Example customer",
-      title: "Alert from your detection system",
-      category: "Transaction monitoring",
-      risk: 20,
-      evidence: [],
-    },
-    null,
-    2,
-  );
+  $("import-scenario").value = "payments";
+  fillImportScenario();
   $("import-error").textContent = "";
   $("import-dialog").showModal();
 };
@@ -644,7 +683,7 @@ async function showStart(navigate = true) {
     if (version !== requestVersion) return;
     const first = catalog.scenarios.find((s) => s.id === "ready");
     $("detail").innerHTML =
-      `<div class="start-page"><div class="start-eyebrow">${icon("layers")} YOUR PRACTICE WORKSPACE</div><h2>Your first investigation.<br>A clear path to a decision.</h2><div class="workspace-personalize"><span class="mini-workspace-logo" data-workspace-logo>S</span><span><strong data-workspace-name>Sandbox</strong><small>Your workspace, your identity</small></span><button class="button" data-personalize>Make it yours</button></div><p class="start-intro">Follow the evidence, check what is missing, and record a decision you can explain. Everything here is synthetic and ready to explore.</p><section class="first-investigation"><div class="start-card-icon">${icon("shield-check")}</div><div><div class="start-recommendation">START HERE</div><h3>Take one case all the way through</h3><p>${escape(first.description)}</p><ol class="start-steps"><li>Inspect evidence</li><li>Run checks</li><li>Record a decision</li><li>Export the record</li></ol><button class="button primary" data-scenario="ready">${icon("play")}Start guided investigation</button><span class="start-fresh">No signup. No API key. A real practice workflow.</span><div class="first-case-secondary"><button class="text-button" data-self-host>Or run it in your own environment ${icon("arrow-up-right")}</button></div></div></section><p id="scenario-error" class="error" role="alert"></p><div class="start-section-heading"><h3>Explore the other paths</h3><span>Real actions · Predictable sample outcomes</span></div><div class="scenario-grid">${catalog.scenarios
+      `<div class="start-page"><div class="start-eyebrow">${icon("layers")} YOUR PRACTICE WORKSPACE</div><h2>Your first investigation.<br>A clear path to a decision.</h2><div class="workspace-personalize"><span class="mini-workspace-logo" data-workspace-logo>S</span><span><strong data-workspace-name>Acme Corp</strong><small>Your workspace, your identity</small></span><button class="button" data-personalize>Make it yours</button></div><p class="start-intro">Follow the evidence, check what is missing, and record a decision you can explain. Everything here is synthetic and ready to explore.</p><section class="first-investigation"><div class="start-card-icon">${icon("shield-check")}</div><div><div class="start-recommendation">START HERE</div><h3>Take one case all the way through</h3><p>${escape(first.description)}</p><ol class="start-steps"><li>Inspect evidence</li><li>Run checks</li><li>Record a decision</li><li>Export the record</li></ol><button class="button primary" data-scenario="ready">${icon("play")}Start guided investigation</button><span class="start-fresh">No signup. No API key. A real practice workflow.</span><div class="first-case-secondary"><button class="text-button" data-self-host>Or run it in your own environment ${icon("arrow-up-right")}</button></div></div></section><p id="scenario-error" class="error" role="alert"></p><div class="start-section-heading"><h3>Explore the other paths</h3><span>Real actions · Predictable sample outcomes</span></div><div class="scenario-grid">${catalog.scenarios
         .filter((s) => s.id !== "ready")
         .map(
           (s) =>
@@ -759,10 +798,10 @@ function toggleTheme() {
     document.documentElement.dataset.theme === "dark" ? "light" : "dark",
   );
 }
-let savedTheme = "light";
+let savedTheme = "dark";
 try {
-  savedTheme = localStorage.getItem("casework-theme") || "light";
+  savedTheme = localStorage.getItem("casework-theme") || "dark";
 } catch {}
-setTheme(savedTheme === "dark" ? "dark" : "light");
+setTheme(savedTheme === "light" ? "light" : "dark");
 $("theme-button").onclick = toggleTheme;
 $("mobile-theme-button").onclick = toggleTheme;

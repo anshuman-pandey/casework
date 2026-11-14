@@ -2,7 +2,7 @@
 (function () {
   const $ = (id) => document.getElementById(id);
   const storage = () => (window.caseworkDemo ? sessionStorage : localStorage);
-  const defaults = { schema: 1, name: "Sandbox", logo: "" };
+  const defaults = { schema: 1, name: "Acme Corp", logo: "" };
   function validate(value) {
     if (
       value?.schema !== 1 ||

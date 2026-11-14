@@ -2571,3 +2571,13 @@ form > .button {
     font-size: 11px;
   }
 }
+
+/* Contextual help stays secondary to the investigator's own reasoning. */
+.rationale-starter,.decision-readiness { padding: 14px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; background: var(--panel); }
+.rationale-starter strong { font-size: 12px; }
+.rationale-starter p,.decision-readiness p,.suggestion-note { font-size: 12px; line-height: 1.6; }
+#decision-check[hidden] { display: none; }
+.technical-details { margin-top: 12px; font-size: 11px; }
+.technical-details code { display:block; overflow-wrap:anywhere; }
+#decision-dialog { max-height: 90vh; overflow-y:auto; }
+#import-scenario { width:100%; margin:8px 0; }

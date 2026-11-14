@@ -49,6 +49,9 @@ const assert = require("node:assert/strict");
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(base);
+    await page.getByRole("button", {name: "Switch to light appearance", exact: true}).waitFor();
+    assert.equal(await page.locator("html").getAttribute("data-theme"), "dark");
+    await page.getByRole("button", {name: "Switch to light appearance", exact: true}).click();
     await page
       .getByRole("button", { name: "Start guided investigation", exact: true })
       .waitFor();
@@ -145,10 +148,8 @@ const assert = require("node:assert/strict");
     await page
       .getByLabel("Decision rationale")
       .fill("Try a closure that should fail.");
-    await page
-      .getByRole("button", { name: "Record decision", exact: true })
-      .click();
-    await page.getByText(/Demo closure gate blocked/).waitFor();
+    assert.equal(await page.locator("#save-decision").isDisabled(), true);
+    await page.getByText(/Closure is blocked. Unmet requirements/).waitFor();
     await page.getByRole("button", { name: "Cancel decision" }).click();
     // Command menu, browser history, shortcut suppression while typing and draft retention.
     await page.keyboard.press("Control+k");
