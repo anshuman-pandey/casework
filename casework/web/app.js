@@ -92,6 +92,7 @@ function syncNavigation() {
   else $("start-nav").removeAttribute("aria-current");
 }
 async function api(path, body) {
+  if (window.caseworkDemo) return window.caseworkDemo.request(path, body);
   const response = await fetch(
     path,
     body === undefined
@@ -227,11 +228,15 @@ function renderDetail() {
         )
         .join("")}</ol>
     </div><aside class="case-inspector" aria-label="Case properties"><h4>Properties</h4><dl class="properties"><div><dt>${icon("circle")}Status</dt><dd>${status}</dd></div><div><dt>${icon("signal")}Source risk</dt><dd><span class="risk ${riskClass}">${c.risk}<span>/ 100</span></span><small>Provided by the source.<br>Not a finding of suspicious activity.</small></dd></div><div><dt>${icon("stack")}Case type</dt><dd>${escape(c.category)}</dd></div><div><dt>${icon("calendar")}Created</dt><dd title="${escape(c.created_at)}">${escape(date(c.created_at))}</dd></div><div><dt>${icon("link")}Source ID</dt><dd class="mono">${escape(c.source_id)}</dd></div></dl>
-    <div class="inspector-section"><h4>Case record</h4><p>Evidence, evaluations and decision history in one portable record.</p><a class="export" href="/api/cases/${encodeURIComponent(c.id)}/export" download="${escape(c.id)}.json">${icon("download")}Export JSON${icon("arrow-up-right")}</a></div><div class="inspector-note">${icon("lock")}<p>Local sandbox<br><span>Synthetic records only</span></p></div></aside></div>`;
+    <div class="inspector-section"><h4>Case record</h4><p>Evidence, evaluations and decision history in one portable record.</p><a class="export" href="/api/cases/${encodeURIComponent(c.id)}/export" download="${escape(c.id)}.json">${icon("download")}Export JSON${icon("arrow-up-right")}</a></div><div class="inspector-note">${icon("lock")}<p>${window.caseworkDemo ? "Browser sandbox" : "Local sandbox"}<br><span>Synthetic records only</span></p></div></aside></div>`;
   $("copy-case-link").onclick = async () => {
     try {
       await navigator.clipboard.writeText(`${location.origin}/#${c.id}`);
-      toast("Case link copied.");
+      toast(
+        window.caseworkDemo
+          ? "Case link copied. It opens only in this tab’s practice session."
+          : "Case link copied.",
+      );
     } catch {
       toast("Could not copy. You can copy the case URL from the address bar.");
     }
@@ -615,9 +620,9 @@ function practiceGuide(c, evaluation) {
       : "A blocker is visible";
     body = evaluation.checks.every((check) => check.passed)
       ? "Review the source content and record a rationale in your own words. Passing these demo checks is not a finding that the activity is legitimate."
-      : "Review the failed check below. A closure attempt will be rejected by the server; you can escalate the case with a rationale.";
+      : "Review the failed check below. A closure attempt will be rejected by the policy gate; you can escalate the case with a rationale.";
   }
-  return `<section class="practice-guide" aria-label="Practice guide"><div class="guide-kicker">${icon("play")} Guided practice</div><h4>${escape(title)}</h4><p>${escape(body)}</p><div class="guide-actions">${decided ? `<a class="button" href="/api/cases/${encodeURIComponent(c.id)}/export" download="${escape(c.id)}.json">${icon("download")}Download case record</a>` : `<button class="button" id="guide-next">${icon(evaluation ? "arrow-up-right" : "folder")}${evaluation ? (evaluation.checks.every((check) => check.passed) ? "Record a decision" : "Escalate with a rationale") : "Inspect the evidence"}</button>`}<button class="text-button" id="guide-scenarios">Try another scenario ${icon("arrow-up-right")}</button></div></section>`;
+  return `<section class="practice-guide" aria-label="Practice guide"><div class="guide-kicker">${icon("play")} Guided practice</div><h4>${escape(title)}</h4><p>${escape(body)}</p><div class="guide-actions">${decided ? `<a class="button" href="/api/cases/${encodeURIComponent(c.id)}/export" download="${escape(c.id)}.json">${icon("download")}Download case record</a>` : `<button class="button" id="guide-next">${icon(evaluation ? "arrow-up-right" : "folder")}${evaluation ? (evaluation.checks.every((check) => check.passed) ? "Record a decision" : "Escalate with a rationale") : "Inspect the evidence"}</button>`}<button class="text-button" id="guide-scenarios">Try another scenario ${icon("arrow-up-right")}</button></div>${decided ? `<div class="completion-next"><span>${c.evidence.length} source records · Decision history preserved · Export ready</span><button class="button primary" data-self-host>Use this workflow yourself ${icon("arrow-up-right")}</button></div>` : ""}</section>`;
 }
 async function showStart(navigate = true) {
   const version = ++requestVersion;
@@ -639,7 +644,7 @@ async function showStart(navigate = true) {
     if (version !== requestVersion) return;
     const first = catalog.scenarios.find((s) => s.id === "ready");
     $("detail").innerHTML =
-      `<div class="start-page"><div class="start-eyebrow">${icon("layers")} YOUR PRACTICE WORKSPACE</div><h2>Your first investigation.<br>A clear path to a decision.</h2><p class="start-intro">Follow the evidence, check what is missing, and record a decision you can explain. Everything here is synthetic and ready to explore.</p><section class="first-investigation"><div class="start-card-icon">${icon("shield-check")}</div><div><div class="start-recommendation">START HERE</div><h3>Take one case all the way through</h3><p>${escape(first.description)}</p><ol class="start-steps"><li>Inspect evidence</li><li>Run checks</li><li>Record a decision</li><li>Export the record</li></ol><button class="button primary" data-scenario="ready">${icon("play")}Start guided investigation</button><span class="start-fresh">A fresh case. Your existing work stays.</span></div></section><p id="scenario-error" class="error" role="alert"></p><div class="start-section-heading"><h3>Explore the other paths</h3><span>Real actions · Predictable sample outcomes</span></div><div class="scenario-grid">${catalog.scenarios
+      `<div class="start-page"><div class="start-eyebrow">${icon("layers")} YOUR PRACTICE WORKSPACE</div><h2>Your first investigation.<br>A clear path to a decision.</h2><div class="workspace-personalize"><span class="mini-workspace-logo" data-workspace-logo>S</span><span><strong data-workspace-name>Sandbox</strong><small>Your workspace, your identity</small></span><button class="button" data-personalize>Make it yours</button></div><p class="start-intro">Follow the evidence, check what is missing, and record a decision you can explain. Everything here is synthetic and ready to explore.</p><section class="first-investigation"><div class="start-card-icon">${icon("shield-check")}</div><div><div class="start-recommendation">START HERE</div><h3>Take one case all the way through</h3><p>${escape(first.description)}</p><ol class="start-steps"><li>Inspect evidence</li><li>Run checks</li><li>Record a decision</li><li>Export the record</li></ol><button class="button primary" data-scenario="ready">${icon("play")}Start guided investigation</button><span class="start-fresh">No signup. No API key. A real practice workflow.</span><div class="first-case-secondary"><button class="text-button" data-self-host>Or run it in your own environment ${icon("arrow-up-right")}</button></div></div></section><p id="scenario-error" class="error" role="alert"></p><div class="start-section-heading"><h3>Explore the other paths</h3><span>Real actions · Predictable sample outcomes</span></div><div class="scenario-grid">${catalog.scenarios
         .filter((s) => s.id !== "ready")
         .map(
           (s) =>
@@ -647,7 +652,8 @@ async function showStart(navigate = true) {
         )
         .join(
           "",
-        )}</div><div class="start-footnote">${icon("lock")}<p>${health.storage === "temporary" ? "This workspace is disposable. Its data is removed when the server stops." : "Your cases are saved in this workspace and kept across restarts."}<br>Samples use current timestamps, except the deliberately stale and future scenarios. No model or external data service is connected.</p></div></div>`;
+        )}</div><div class="start-footnote">${icon("lock")}<p>${window.caseworkDemo ? (window.caseworkDemo.storageAvailable ? "Practice stays in this tab, expires after two hours on your next action, and can be reset at any time. Nothing you enter is sent to our server." : "Browser storage is unavailable. Practice lasts until this page reloads. Nothing you enter is sent to our server.") : health.storage === "temporary" ? "This workspace is disposable. Its data is removed when the server stops." : "Your cases are saved in this workspace and kept across restarts."}<br>Samples use current timestamps, except the deliberately stale and future scenarios. No model or external data service is connected.</p></div></div>`;
+    window.caseworkWorkspace?.apply();
     $("detail").scrollTop = 0;
     $("detail")
       .querySelectorAll("[data-scenario]")
@@ -706,6 +712,25 @@ async function initialize() {
     toast(error.message);
   }
 }
+document.addEventListener("casework:notice", (event) => toast(event.detail));
+document.addEventListener("casework:exported", () =>
+  toast(
+    "Case record download started. Your evidence and decision history are included.",
+  ),
+);
+document.addEventListener("casework:reset", async () => {
+  requestVersion++;
+  drafts.clear();
+  expandedEvidence.clear();
+  current = null;
+  selected = null;
+  pendingAction = null;
+  history.replaceState(null, "", "#start");
+  $("search").value = "";
+  $("status-filter").value = "all";
+  await initialize();
+  toast("Fresh practice is ready. Your workspace appearance was kept.");
+});
 initialize();
 
 function setTheme(theme) {

@@ -50,7 +50,7 @@ def make_handler(store, temporary=False):
             self.send_header("Content-Length", str(len(raw)))
             self.send_header("Cache-Control", "no-store")
             self.send_header("X-Content-Type-Options", "nosniff")
-            self.send_header("Content-Security-Policy", "default-src 'self'; style-src 'self'; script-src 'self'; frame-ancestors 'none'; base-uri 'none'")
+            self.send_header("Content-Security-Policy", "default-src 'self'; style-src 'self'; img-src 'self' data:; script-src 'self'; frame-ancestors 'none'; base-uri 'none'")
             self.end_headers()
             self.wfile.write(raw)
 
@@ -75,6 +75,8 @@ def make_handler(store, temporary=False):
                     return self.send(200, store.get(parts[2]))
                 assets = {"/": ("index.html", "text/html; charset=utf-8"),
                           "/app.js": ("app.js", "text/javascript; charset=utf-8"),
+                          "/workspace.js": ("workspace.js", "text/javascript; charset=utf-8"),
+                          "/version.js": ("version.js", "text/javascript; charset=utf-8"),
                           "/theme.js": ("theme.js", "text/javascript; charset=utf-8"),
                           "/style.css": ("style.css", "text/css; charset=utf-8"),
                           "/fonts/InterVariable.woff2": ("fonts/InterVariable.woff2", "font/woff2")}

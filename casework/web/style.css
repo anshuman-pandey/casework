@@ -2325,3 +2325,249 @@ form > .button {
     font-size: 12px;
   }
 }
+
+/* Workspace identity is restrained; workflows and navigation stay consistent. */
+.workspace {
+  width: 100%;
+  text-align: left;
+  color: var(--text);
+  cursor: pointer;
+}
+.workspace:hover {
+  border-color: var(--strong-border);
+  background: var(--subtle);
+}
+.workspace > div {
+  min-width: 0;
+}
+.workspace [data-workspace-name] {
+  display: block;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+[data-workspace-logo] {
+  overflow: hidden;
+  font-weight: 600;
+  font-size: 13px;
+}
+[data-workspace-logo] img,
+.logo-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.breadcrumb [data-workspace-name] {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.self-host-top {
+  min-height: 27px;
+  font-size: 10px;
+  padding: 5px 8px;
+  margin-right: 6px;
+  color: var(--text);
+}
+.workspace-personalize {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 18px;
+  max-width: 440px;
+}
+.mini-workspace-logo {
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 35px;
+  height: 35px;
+  flex-shrink: 0;
+}
+.workspace-personalize > span:nth-child(2) {
+  min-width: 0;
+}
+.workspace-personalize strong {
+  font-size: 12px;
+  font-weight: 550;
+  display: block;
+  overflow-wrap: anywhere;
+}
+.workspace-personalize small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 2px;
+}
+.workspace-personalize .button {
+  margin-left: 18px;
+  font-size: 10px;
+}
+.first-case-secondary {
+  margin-top: 13px;
+}
+.first-case-secondary .text-button {
+  padding: 0;
+  font-size: 10px;
+}
+.completion-next {
+  border-top: 1px solid color-mix(in srgb, var(--accent) 15%, var(--border));
+  padding-top: 13px;
+  margin-top: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.completion-next > span {
+  font-size: 10px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.workspace-input {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--strong-border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 13px;
+}
+.logo-settings {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 18px 0;
+}
+.logo-settings label {
+  margin: 0 0 8px;
+}
+.logo-settings input {
+  font-size: 11px;
+  max-width: 100%;
+}
+.logo-settings > div {
+  min-width: 0;
+}
+.logo-preview {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--accent-soft);
+  font-size: 24px;
+  color: var(--accent-text);
+  overflow: hidden;
+}
+.settings-transfer {
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+  margin-top: 22px;
+  font-size: 12px;
+}
+.settings-transfer > strong {
+  font-weight: 550;
+}
+.settings-transfer p {
+  font-size: 11px;
+}
+.settings-transfer input {
+  font-size: 11px;
+  max-width: 100%;
+}
+#reset-practice {
+  margin-top: 20px;
+  color: var(--danger);
+}
+#reset-practice[hidden] {
+  display: none;
+}
+.install-command {
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-size: 12px;
+  overflow: auto;
+}
+.hosting-note {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--subtle);
+  margin: 20px 0;
+}
+.hosting-note strong {
+  font-size: 11px;
+  font-weight: 550;
+}
+.hosting-note p {
+  font-size: 11px;
+  margin: 8px 0 0;
+}
+.text-link {
+  color: var(--accent-text);
+  font-size: 12px;
+  text-decoration: none;
+}
+.text-link:hover {
+  text-decoration: underline;
+}
+@media (max-width: 640px) {
+  .breadcrumb {
+    gap: 6px;
+  }
+  .breadcrumb [data-workspace-name] {
+    max-width: 66px;
+  }
+  .topbar {
+    padding: 0 10px;
+  }
+  .topbar-actions {
+    gap: 3px;
+  }
+  .topbar .text-button {
+    padding: 5px 3px;
+  }
+  .self-host-top {
+    margin: 0;
+    padding: 5px 6px;
+    font-size: 9px;
+    min-height: 30px;
+  }
+  .self-host-top > .icon {
+    display: none;
+  }
+  .topbar kbd {
+    display: none;
+  }
+  .workspace-personalize {
+    gap: 9px;
+  }
+  .workspace-personalize .button {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .workspace-personalize strong {
+    font-size: 13px;
+  }
+  .workspace-personalize small {
+    font-size: 10px;
+  }
+  .install-command {
+    font-size: 10px;
+  }
+  .completion-next > span {
+    font-size: 11px;
+  }
+}
