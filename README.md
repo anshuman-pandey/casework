@@ -79,7 +79,7 @@ git clone https://github.com/anshuman-pandey/casework.git "$HOME/casework"; if (
 
 Your first investigation: **open the sample → Record a decision → Tab to accept the complete sample rationale → Record decision**. Checks run automatically. Inspect evidence or edit the rationale whenever you want; download the record after saving. Reopen the case to see that its earlier history remains.
 
-![Getting started: one guided investigation and five additional sample paths](docs/assets/demo-start.png)
+![Getting started in dark mode: one guided investigation and five additional sample paths](docs/assets/demo-start-dark.png)
 
 ## Prefer Docker?
 
@@ -114,9 +114,9 @@ Notion and Linear are our explicit quality references: a readable case document,
 
 Use **Ctrl/Cmd+K** for cases and commands, **/** for queue search, and **J/K** for case navigation. Copy case links, use browser Back/Forward, inspect evidence without losing expansion state, and keep rationale drafts during the session. Dark appearance is the default; your light/dark choice is remembered locally. Fonts and icons are bundled; the application does not call a CDN or send telemetry.
 
-![Casework investigation workspace](docs/assets/demo-case.png)
+![Casework investigation workspace in dark mode: evidence, recorded decision and downloadable case record](docs/assets/demo-dark.png)
 
-[Dark appearance](docs/assets/demo-dark.png) · [Mobile layout](docs/assets/demo-mobile.png) · [Command menu](docs/assets/commands.png)
+[Dark mobile preview](docs/assets/demo-mobile-dark.png) · [Light workspace](docs/assets/demo-case.png) · [Light onboarding](docs/assets/demo-start.png) · [Command menu](docs/assets/commands.png)
 
 ## What works, and what comes next
 
