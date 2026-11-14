@@ -107,6 +107,7 @@ const assert = require("node:assert/strict");
       .click();
     await page.getByText(/Synthetic profile for Atlas Studio/).waitFor();
     await page.getByRole("button", { name: "Run policy check" }).click();
+    await page.waitForFunction(() => document.activeElement === document.querySelector("#evaluate") && !document.querySelector("#evaluate").disabled);
     await page.getByText("All three required evidence types present").waitFor();
     await page.getByRole("button", { name: "Review & close" }).click();
     await page
@@ -141,6 +142,7 @@ const assert = require("node:assert/strict");
     await page.getByRole("button", { name: "Run policy check" }).waitFor();
     await page.getByRole("button", { name: /Northstar Trading/ }).click();
     await page.getByRole("button", { name: "Run policy check" }).click();
+    await page.waitForFunction(() => document.activeElement === document.querySelector("#evaluate") && !document.querySelector("#evaluate").disabled);
     await page
       .getByText("Source risk score below demo threshold of 30")
       .waitFor();
@@ -179,6 +181,7 @@ const assert = require("node:assert/strict");
       .filter({ hasText: "Customer profile" })
       .click();
     await page.getByRole("button", { name: "Run policy check" }).click();
+    await page.waitForFunction(() => document.activeElement === document.querySelector("#evaluate") && !document.querySelector("#evaluate").disabled);
     await page.getByText("All three required evidence types present").waitFor();
     assert.equal(
       await page
@@ -269,6 +272,7 @@ const assert = require("node:assert/strict");
     await page.setViewportSize({ width: 1440, height: 1100 });
     await page.getByRole("button", { name: /Atlas Studio/ }).click();
     await page.getByRole("button", { name: "Run policy check" }).click();
+    await page.waitForFunction(() => document.activeElement === document.querySelector("#evaluate") && !document.querySelector("#evaluate").disabled);
     await page.getByText("All three required evidence types present").waitFor();
     await page.locator("#toast").waitFor({ state: "hidden" });
     if (process.env.CASEWORK_SCREENSHOT)
