@@ -308,7 +308,7 @@ function renderDetail() {
           }[pendingAction.action];
           $("decision-description").textContent =
             pendingAction.action === "close"
-              ? "Confirm you reviewed the synthetic evidence. Closure requires a recorded evaluation and all demo policy checks to pass."
+              ? "Review the sources and explain your decision. Readiness checks must pass before closing."
               : "Your rationale will be saved in the case history.";
           $("reason").value = drafts.get(c.id) || "";
           $("decision-error").textContent = "";

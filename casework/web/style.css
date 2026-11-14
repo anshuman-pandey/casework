@@ -2581,3 +2581,6 @@ form > .button {
 .technical-details code { display:block; overflow-wrap:anywhere; }
 #decision-dialog { max-height: 90vh; overflow-y:auto; }
 #import-scenario { width:100%; margin:8px 0; }
+
+.rationale-starter > summary { cursor:pointer; font-size:12px; font-weight:550; }
+.rationale-starter > summary .suggestion-note { font-weight:400; }

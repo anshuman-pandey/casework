@@ -192,6 +192,10 @@ const { execFileSync } = require("node:child_process");
     await page.locator("#save-decision").click();
     await page.getByText(/Replace the bracketed prompt/).waitFor();
     await page.screenshot({path:path.join(root,"test-results/demo-decision.png")});
+    await page.setViewportSize({width:390,height:900});
+    assert.ok(await page.evaluate(() => document.querySelector("#decision-dialog").getBoundingClientRect().width <= innerWidth));
+    await page.screenshot({path:path.join(root,"test-results/demo-decision-mobile.png")});
+    await page.setViewportSize({width:1440,height:1100});
     await page
       .getByLabel("Decision rationale")
       .fill(
