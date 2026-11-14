@@ -182,7 +182,7 @@ const assert = require("node:assert/strict");
     await page.getByText("All three required evidence types present").waitFor();
     assert.equal(
       await page
-        .locator("details")
+        .locator("details.evidence")
         .filter({ hasText: "Customer profile" })
         .getAttribute("open"),
       "",

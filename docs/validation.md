@@ -64,3 +64,7 @@ Public deployment succeeded on 14 November 2026. Anonymous HTTP retrieval confir
 ## Folder-independent startup
 
 The `start.py` launcher was checked on Linux from an unrelated working directory with an extracted project path containing spaces. Startup selected a free port, health reported the expected mode, six sample cases loaded, disposable mode left no project database, and two persistent launches returned the same records. All 18 Python tests passed. The macOS shell launcher passed shell syntax checking. Native Finder/Windows double-click behavior and actual desktop browser opening have not been verified here; the printed URL and explicit Python path remain available as fallbacks.
+
+## Guided decision and import refinement
+
+The public browser suite verifies dark default, remembered theme switching, Acme Corp default identity, hidden technical fingerprints, in-dialog readiness checks, disabled premature closure, Tab insertion, required replacement of suggestion prompts, and all three import presets. Desktop and 390px decision-dialog screenshots were visually inspected. The native browser evidence selector was narrowed to evidence cards after introducing the separate suggestion disclosure. Source policy checks and the six-scenario browser/Python contract suite remain unchanged.
