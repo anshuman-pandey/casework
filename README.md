@@ -15,6 +15,8 @@ Start with a complete sample case. Keep the evidence, decision and history toget
 
 > This is a working **single-user sandbox for synthetic data**. Model-backed agents, team authentication and enterprise operations are on the roadmap. It is not ready for real customer data or public application hosting.
 
+> **Publication pending:** this source bundle is committed and runnable, but the connected GitHub integration could not create the public repository. The GitHub links above become available after repository setup. From the extracted bundle, run `python3 -m casework --demo` now. [Maintainer publishing steps](docs/publishing.md).
+
 ## Your first investigation
 
 With **Python 3.12+** installed:

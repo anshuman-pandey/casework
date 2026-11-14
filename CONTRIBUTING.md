@@ -13,7 +13,7 @@ Avoid speculative frameworks, connector stubs presented as integrations, fabrica
 
 Useful next contributions: independently reproduce onboarding; evaluate an existing platform against the research tasks; design the production alert schema; specify authentication and tenant isolation; build an import reconciliation fixture. Discuss schema, license and production-stack changes before undertaking a large implementation.
 
-The public repository is [anshuman-pandey/casework](https://github.com/anshuman-pandey/casework). Start with a [first-run report](https://github.com/anshuman-pandey/casework/issues/new?template=first_run.yml), bug report or focused workflow proposal. Fork the repo, create a branch and open a pull request; public contributions do not need a collaborator invitation. Direct write access is managed separately by the repository owner.
+The intended public repository is [anshuman-pandey/casework](https://github.com/anshuman-pandey/casework); see the README for publication status. Once available, start with a [first-run report](https://github.com/anshuman-pandey/casework/issues/new?template=first_run.yml), bug report or focused workflow proposal. Fork the repo, create a branch and open a pull request; public contributions do not need a collaborator invitation. Direct write access is managed separately by the repository owner.
 
 For optional browser checks, use Node 22+, run `npm ci`, then `npx playwright install chromium` and `npm test`. Linux may need `npx playwright install --with-deps chromium`. Set `CHROMIUM_PATH` to use another installed Chromium. The application itself has no Node dependency.
 
