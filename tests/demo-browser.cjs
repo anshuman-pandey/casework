@@ -94,7 +94,7 @@ const { execFileSync } = require("node:child_process");
         name: "logo.png",
         mimeType: "image/png",
         buffer: Buffer.from(
-          "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=",
+          "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGMwKAgAAAHEAPFSyqHAAAAAAElFTkSuQmCC",
           "base64",
         ),
       });
