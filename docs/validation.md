@@ -49,4 +49,4 @@ The complete local Python suite passed 18 tests. The expanded browser suite pass
 
 The disposable-mode test verified that the existing database was unchanged, temporary storage was reported, six seed cases loaded, and the temporary directory was removed on graceful shutdown. Markdown local links and source syntax checks passed. Windows/macOS native startup, human time-to-value targets, SSH deployment and the manual backup recovery instructions have not been independently validated in this Linux environment.
 
-Public repository creation was attempted but GitHub returned `Resource not accessible by integration (createRepository)`. Browser control was unavailable. The source is committed locally; remote publication, release upload and GitHub Actions execution are pending repository access. No public release or remote CI success is claimed.
+The preview ZIP was extracted into a clean directory, started independently, and passed all 34 API checks. GitHub Actions results are tracked separately from these local checks.
