@@ -50,3 +50,11 @@ The complete local Python suite passed 18 tests. The expanded browser suite pass
 The disposable-mode test verified that the existing database was unchanged, temporary storage was reported, six seed cases loaded, and the temporary directory was removed on graceful shutdown. Markdown local links and source syntax checks passed. Windows/macOS native startup, human time-to-value targets, SSH deployment and the manual backup recovery instructions have not been independently validated in this Linux environment.
 
 The preview ZIP was extracted into a clean directory, started independently, and passed all 34 API checks. GitHub Actions results are tracked separately from these local checks.
+
+## Public browser demo and workspace identity
+
+GitHub Actions run [43618337716](https://github.com/anshuman-pandey/casework/actions/runs/43618337716) passed Python 3.12/3.13, container lifecycle, existing native browser checks and the new public demo checks. The public browser journey covers logo/name configuration, appearance export/import, separate visitor contexts, inspect/evaluate/decide/export, reload, self-host download link, reset confirmation, themes and widths 320/390/768/1440. It recorded zero case API requests and zero JavaScript errors.
+
+The browser store contract suite also passed scenario parity against Python, idempotency, concurrent mutation serialization, failed-write rollback, expiry, capacity and reset. This is targeted parity for the included scenarios, not proof that arbitrary browser and server inputs are equivalent.
+
+The managed interactive preview relay was unavailable. Browser checks ran in GitHub Actions; no local interactive browser inspection is claimed for this pass. The manual **Refresh product screenshots** workflow regenerates and commits real demo screenshots for review.

@@ -1,20 +1,27 @@
 <div align="center">
 
-# casework.
+![Casework — every decision, with its evidence](docs/assets/banner.svg)
 
 ### Open-source AML case management and fraud investigation
 
-Open-source fraud and AML investigation software.<br>
 Start with a complete sample case. Keep the evidence, decision and history together.
 
 **Apache-2.0** · **Developer preview** · **Python or Docker** · **No model key required**
 
-[Download ZIP](https://github.com/anshuman-pandey/casework/archive/refs/heads/main.zip) · [Try it](#your-first-investigation) · [Self-host](docs/self-hosting.md) · [Scenarios](docs/scenarios.md) · [Contribute](CONTRIBUTING.md)
+[**Try the live demo →**](https://casework-live.sunshinevendetta.chatgpt.site) · [Download ZIP](https://github.com/anshuman-pandey/casework/archive/refs/heads/main.zip) · [Self-host](docs/self-hosting.md) · [Scenarios](docs/scenarios.md) · [Contribute](CONTRIBUTING.md)
 
 </div>
 
-> This is a working **single-user sandbox for synthetic data**. Model-backed agents, team authentication and enterprise operations are on the roadmap. It is not ready for real customer data or public application hosting.
+> This is a working **single-user sandbox for synthetic data**. Model-backed agents, team authentication and enterprise operations are on the roadmap. Use synthetic data only. The Python server is for private evaluation; the public demo runs entirely in your browser.
 
+
+## A complete investigation. No setup.
+
+[**Open the practice workspace →**](https://casework-live.sunshinevendetta.chatgpt.site)
+
+Start a guided case, inspect its sources, record your decision and download the evidence trail. Add your business name and logo if you like—no branding wizard stands between you and the workflow. No account or API key required.
+
+Practice records stay in your browser session. The demo uses the same interface as the self-hosted app, with browser-local storage instead of SQLite. [Demo details and limits](docs/live-demo.md).
 
 ## Your first investigation
 
@@ -82,7 +89,7 @@ Use **Ctrl/Cmd+K** for cases and commands, **/** for queue search, and **J/K** f
 
 | Available in this preview | Still to build |
 |---|---|
-| Guided samples, Python startup and persistent Docker setup | Authenticated teams, RBAC, SSO and tenant isolation |
+| Public browser demo, optional branding, Python and Docker setup | Authenticated teams, RBAC, SSO and tenant isolation |
 | Cases, evidence, search and status filters over the first 500 cases | Paginated search, saved views, SLAs and assignment |
 | JSON ingestion with idempotent source IDs | CSV migration, connectors and reconciliation |
 | Deterministic, versioned policy evaluation | Model-backed investigation with cited findings |

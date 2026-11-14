@@ -57,3 +57,7 @@ Next: real custom views and forms, a source-linked narrative editor, annotation/
 Give them an uncoached task: find a case, explain its trigger, locate its original evidence, identify missing context, record a justified decision and retrieve the record. Then change the inputs and observe whether they notice stale information. Repeat with keyboard and mouse. Record completion, hesitation, recovery and trust, not just visual preference.
 
 Before approving a surface: check realistic long names, empty results, failed requests, unsaved input, keyboard focus, small screens, text zoom, reduced motion, status contrast and decision semantics. Automated smoke checks support this review; they do not replace accessibility or user testing.
+
+## Workspace identity
+
+Keep one consistent interface across deployments. Workspace name and logo are optional browser preferences; customization must not block the guided investigation. The first successful decision exposes a concrete next step: export the record or run the same interface locally. No compulsory company form or fabricated performance claims.

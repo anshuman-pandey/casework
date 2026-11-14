@@ -14,7 +14,7 @@ A new evaluator should reach this conclusion through their own actions: **“I c
 
 ## The shortest useful path
 
-Download → start → one fresh investigation → inspect sources → evaluate → decide with a rationale → export. No registration, provider key, schema design, connector installation or configuration wizard comes before that outcome.
+Open the public demo → one fresh investigation → inspect sources → evaluate → decide with a rationale → export. No registration, provider key, schema design, connector installation or configuration wizard comes before that outcome.
 
 The first-run screen provides one recommended action, with separate sample paths for blockers. Each sample has a stated expected outcome. New samples preserve existing work. `--demo` offers a disposable workspace; persistent native and Docker modes are separate and clearly named.
 
@@ -22,7 +22,7 @@ The first-run screen provides one recommended action, with separate sample paths
 
 | Person / context | What they need | Current support / remaining constraint |
 |---|---|---|
-| Non-developer investigator | A running sandbox, readable sample evidence and a clear next step | Guided case and scenario descriptions are implemented. An operator still needs to start the sandbox. No public hosted demo yet. |
+| Non-developer investigator | A running sandbox, readable sample evidence and a clear next step | Guided case and scenario descriptions are implemented. A public browser-local demo requires no setup; self-hosting remains a separate path. |
 | Developer without Docker | Python 3.12+, a writable folder and a free port | No Python packages, Node build or external database required. Windows launcher instructions are included. Windows/macOS have not been tested directly in this environment. |
 | Developer who prefers containers | Docker Engine/Desktop and Compose v2.20+ | One build/start command; no host Python dependency. First build needs internet access for the base image. |
 | Private server evaluator | An SSH account and a tunnel to the server's loopback port | Supported for synthetic single-user evaluation. No public port or reverse proxy is needed. |
@@ -44,7 +44,7 @@ Only the last technical guarantees are covered by automated checks today. The hu
 
 Give a collaborator the public repo link and these tasks without a live walkthrough:
 
-1. Start it using the README. Record OS, chosen path, elapsed time and the first point of confusion.
+1. Open the live demo, then try self-hosting using the README. Record OS, chosen path, elapsed time and the first point of confusion.
 2. Complete the guided case, export it and explain what the policy did and did not establish.
 3. Find and escalate a blocked case. Explain the blocker in their own words.
 4. Restart their persistent workspace and locate the same decision.
