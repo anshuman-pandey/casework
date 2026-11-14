@@ -4,6 +4,10 @@
 
 This preview is a **single-user synthetic-data sandbox**. You can run it on your own machine or a private server reached over SSH. It has no login or permission model and uses Python's development HTTP server. Public or multi-user production hosting is not supported yet.
 
+## New to Terminal?
+
+Start with the [download-and-launch guide](../README.md#run-it-on-your-computer). The `start.py` launcher works from any terminal folder, opens the browser and chooses a free port. Default launches are disposable; `--keep` saves records beside the launcher. It requires Python 3.12+. The commands below are for running directly from the project folder.
+
 ## Pick the right mode
 
 | Goal | Requirement | Start | What happens to data |
@@ -113,6 +117,8 @@ Compare a known exported case with the recovered record. This is a manual sandbo
 
 | Symptom | Action |
 |---|---|
+| `No module named casework` or file not found | Use the full path to `start.py` as shown in the README; extract the ZIP first. Direct `python3 -m casework` requires the project folder. |
+| Browser did not open | Keep the terminal running and open the printed `http://127.0.0.1:...` URL manually. |
 | `python3` not found | Install Python 3.12+ or use Docker. On Windows try `py -3`. |
 | Port already in use | Stop the other local instance or select another port as documented above. |
 | SQLite cannot open/write the database | Check that the parent directory exists and is writable. In Docker use the supplied named volume. |

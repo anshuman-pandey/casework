@@ -5,6 +5,8 @@ import os
 import signal
 import sqlite3
 import tempfile
+import threading
+import webbrowser
 from contextlib import ExitStack
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -133,6 +135,7 @@ def main():
     parser.add_argument("--host", choices=("127.0.0.1", "0.0.0.0"), default="127.0.0.1",
                         help="Use 0.0.0.0 only inside a container with a loopback-published port")
     parser.add_argument("--empty", action="store_true", help="Skip synthetic seed cases")
+    parser.add_argument("--open", action="store_true", help="Open the local workspace in your default browser")
     args = parser.parse_args()
     if not 0 <= args.port <= 65535:
         parser.error("port must be between 0 and 65535")
@@ -151,6 +154,13 @@ def main():
         print(f"Casework local demo: http://127.0.0.1:{server.server_port} — synthetic data only", flush=True)
         print("Open Getting started to launch a fresh guided investigation.", flush=True)
         print("Disposable workspace: data is removed when this process stops." if args.demo else f"Database: {path.resolve()} (kept across restarts)", flush=True)
+        if args.open:
+            def open_browser():
+                try:
+                    webbrowser.open(f"http://127.0.0.1:{server.server_port}")
+                except Exception:
+                    print("Open the URL above in your browser.", flush=True)
+            threading.Thread(target=open_browser, daemon=True).start()
         try:
             server.serve_forever()
         except KeyboardInterrupt:

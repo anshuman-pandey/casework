@@ -23,28 +23,61 @@ Start a guided case, inspect its sources, record your decision and download the 
 
 Practice records stay in your browser session. The demo uses the same interface as the self-hosted app, with browser-local storage instead of SQLite. [Demo details and limits](docs/live-demo.md).
 
-## Your first investigation
+## Run it on your computer
 
-With **Python 3.12+** installed:
+**You need [Python 3.12 or newer](https://www.python.org/downloads/).** No Python packages, database installation or API key is required.
+
+### Download and launch
+
+1. [Download Casework ZIP](https://github.com/anshuman-pandey/casework/archive/refs/heads/main.zip).
+2. **Extract the ZIP**. Open the extracted folder containing `start.py` and `README.md`.
+3. **Windows:** double-click `Start-Casework.cmd`. **macOS:** double-click `Start-Casework.command`. If macOS blocks it or Linux opens it as text, use the terminal instructions below.
+
+Your browser opens automatically. Choose **Start guided investigation**. Keep the terminal window open while using Casework; press **Ctrl+C** in that window to stop. Each launch creates disposable sample data. Export any case records you want to keep.
+
+<details>
+<summary><strong>Using Terminal? No need to type a folder path.</strong></summary>
+
+**macOS / Linux:** open Terminal, type `python3` followed by a space, then drag **start.py** from the extracted folder into Terminal. Press **Enter**.
+
+**Windows:** open PowerShell, type `py -3` followed by a space, then drag **start.py** from File Explorer into PowerShell. Press **Enter**. If dragging is unavailable, right-click the file → **Copy as path**, then paste it after `py -3 `.
+
+The result should look like one of these examples. Your actual folder name may differ. Keep the quotes when the path contains spaces:
 
 ```sh
-git clone https://github.com/anshuman-pandey/casework.git
-cd casework
-python3 -m casework --demo
+python3 "/Users/you/Downloads/casework-main/start.py"
 ```
 
-Or [download and extract the ZIP](https://github.com/anshuman-pandey/casework/archive/refs/heads/main.zip), open a terminal in the extracted folder, and run the last command. On Windows, use `py -3 -m casework --demo`.
+```powershell
+py -3 "C:\Users\you\Downloads\casework-main\start.py"
+```
 
-Open **http://127.0.0.1:8080** and click **Start guided investigation**.
+The launcher finds the project itself; you do **not** need `cd`. It selects a free port and prints the browser URL. To keep records across restarts, append `--keep`; records are saved in `casework.db` beside `start.py`. To avoid opening the browser, append `--no-browser`.
 
-1. **Inspect** the synthetic profile, payments and screening snapshot.
-2. **Run the policy check** to see the three eligibility checks.
-3. **Record a decision** with your own rationale.
-4. **Download the case record**: evidence, evaluation and decision history in one JSON file.
+</details>
 
-That is the first useful outcome: a reviewable case decision you can take with you. Reopen the case and see that the earlier history remains.
+<details>
+<summary><strong>Already have Git and Python? Copy one command.</strong></summary>
 
-No account, package installation, external database or API key is required. `--demo` creates a disposable workspace; stopping the process removes that workspace and leaves existing databases untouched. To keep your work across restarts, use `python3 -m casework` without `--demo`.
+Run from any terminal folder. The first run downloads source into a new `casework` folder in your home directory and launches it. It does not install Python or overwrite an existing folder.
+
+**macOS / Linux**
+
+```sh
+git clone https://github.com/anshuman-pandey/casework.git "$HOME/casework" && python3 "$HOME/casework/start.py"
+```
+
+**Windows PowerShell**
+
+```powershell
+git clone https://github.com/anshuman-pandey/casework.git "$HOME/casework"; if ($LASTEXITCODE -eq 0) { py -3 "$HOME/casework/start.py" }
+```
+
+**Next time:** run `python3 "$HOME/casework/start.py"` (macOS/Linux) or `py -3 "$HOME/casework/start.py"` (PowerShell). Append `--keep` for persistent records. If that folder already exists, use this launch command for your existing Casework checkout, or use the ZIP path above for a separate copy.
+
+</details>
+
+Your first investigation: **inspect evidence → run the policy check → record your rationale → download the case record**. Reopen the case to see that its earlier history remains.
 
 ![Getting started: one guided investigation and five additional sample paths](docs/assets/demo-start.png)
 

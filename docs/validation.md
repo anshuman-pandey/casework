@@ -60,3 +60,7 @@ The browser store contract suite also passed scenario parity against Python, ide
 The managed interactive preview relay was unavailable. Browser checks ran in GitHub Actions; no local interactive browser inspection is claimed for this pass. The manual **Refresh product screenshots** workflow regenerates and commits real demo screenshots for review.
 
 Public deployment succeeded on 14 November 2026. Anonymous HTTP retrieval confirmed the authored page and build-info for v0.2.0-preview.1; Sites reports public access. Desktop, dark and 390px mobile screenshots from the CI browser run were visually inspected. Screenshot capture now waits for transient notifications to disappear.
+
+## Folder-independent startup
+
+The `start.py` launcher was checked on Linux from an unrelated working directory with an extracted project path containing spaces. Startup selected a free port, health reported the expected mode, six sample cases loaded, disposable mode left no project database, and two persistent launches returned the same records. All 18 Python tests passed. The macOS shell launcher passed shell syntax checking. Native Finder/Windows double-click behavior and actual desktop browser opening have not been verified here; the printed URL and explicit Python path remain available as fallbacks.
