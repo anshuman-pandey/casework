@@ -24,6 +24,8 @@ jobs:
         run: |
           cp test-results/demo-decision-mobile.png docs/assets/demo-decision-mobile.png
           cp test-results/demo-decision.png docs/assets/demo-decision.png
+          cp test-results/demo-start-dark.png docs/assets/demo-start-dark.png
+          cp test-results/demo-mobile-dark.png docs/assets/demo-mobile-dark.png
           cp test-results/demo-start.png docs/assets/demo-start.png
           cp test-results/demo-case.png docs/assets/demo-case.png
           cp test-results/demo-dark.png docs/assets/demo-dark.png

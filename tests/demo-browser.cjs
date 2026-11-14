@@ -158,6 +158,9 @@ const { execFileSync } = require("node:child_process");
     await page.screenshot({
       path: path.join(root, "test-results/demo-start.png"),
     });
+    await page.getByRole("button", {name:"Switch to dark appearance",exact:true}).click();
+    await page.screenshot({path:path.join(root,"test-results/demo-start-dark.png")});
+    await page.getByRole("button", {name:"Switch to light appearance",exact:true}).click();
     await page
       .getByRole("button", { name: "Start guided investigation", exact: true })
       .click();
@@ -288,11 +291,12 @@ const { execFileSync } = require("node:child_process");
         ),
         `overflow ${width}`,
       );
-      if (width === 390)
-        await page.screenshot({
-          path: path.join(root, "test-results/demo-mobile.png"),
-          fullPage: true,
-        });
+      if (width === 390) {
+        await page.screenshot({path:path.join(root,"test-results/demo-mobile.png"),fullPage:true});
+        await page.getByRole("button", {name:"Switch to dark appearance",exact:true}).click();
+        await page.screenshot({path:path.join(root,"test-results/demo-mobile-dark.png"),fullPage:true});
+        await page.getByRole("button", {name:"Switch to light appearance",exact:true}).click();
+      }
     }
     await page.getByRole("button", {name:"Import alert", exact:true}).click();
     const sample = JSON.parse(await page.locator("#alert-json").inputValue());
