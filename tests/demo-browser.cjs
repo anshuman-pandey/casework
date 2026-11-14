@@ -151,6 +151,7 @@ const { execFileSync } = require("node:child_process");
     );
     fs.mkdirSync(path.join(root, "test-results"), { recursive: true });
     await page.evaluate(() => document.fonts.ready);
+    await page.locator("#toast").waitFor({ state: "hidden" });
     await page.screenshot({
       path: path.join(root, "test-results/demo-start.png"),
     });
@@ -255,6 +256,7 @@ const { execFileSync } = require("node:child_process");
       await page.locator("[data-workspace-name]").first().textContent(),
       "Orbit Pay",
     );
+    await page.locator("#toast").waitFor({ state: "hidden" });
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
       assert.ok(

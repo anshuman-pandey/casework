@@ -46,7 +46,7 @@ That is the first useful outcome: a reviewable case decision you can take with y
 
 No account, package installation, external database or API key is required. `--demo` creates a disposable workspace; stopping the process removes that workspace and leaves existing databases untouched. To keep your work across restarts, use `python3 -m casework` without `--demo`.
 
-![Getting started: one guided investigation and five additional sample paths](docs/assets/getting-started.png)
+![Getting started: one guided investigation and five additional sample paths](docs/assets/demo-start.png)
 
 ## Prefer Docker?
 
@@ -81,9 +81,9 @@ Notion and Linear are our explicit quality references: a readable case document,
 
 Use **Ctrl/Cmd+K** for cases and commands, **/** for queue search, and **J/K** for case navigation. Copy case links, use browser Back/Forward, inspect evidence without losing expansion state, and keep rationale drafts during the session. Light/dark appearance is remembered locally. Fonts and icons are bundled; the application does not call a CDN or send telemetry.
 
-![Casework investigation workspace](docs/assets/workspace.png)
+![Casework investigation workspace](docs/assets/demo-case.png)
 
-[Dark appearance](docs/assets/dark.png) · [Mobile layout](docs/assets/mobile.png) · [Command menu](docs/assets/commands.png)
+[Dark appearance](docs/assets/demo-dark.png) · [Mobile layout](docs/assets/demo-mobile.png) · [Command menu](docs/assets/commands.png)
 
 ## What works, and what comes next
 

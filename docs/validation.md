@@ -58,3 +58,5 @@ GitHub Actions run [43618337716](https://github.com/anshuman-pandey/casework/act
 The browser store contract suite also passed scenario parity against Python, idempotency, concurrent mutation serialization, failed-write rollback, expiry, capacity and reset. This is targeted parity for the included scenarios, not proof that arbitrary browser and server inputs are equivalent.
 
 The managed interactive preview relay was unavailable. Browser checks ran in GitHub Actions; no local interactive browser inspection is claimed for this pass. The manual **Refresh product screenshots** workflow regenerates and commits real demo screenshots for review.
+
+Public deployment succeeded on 14 November 2026. Anonymous HTTP retrieval confirmed the authored page and build-info for v0.2.0-preview.1; Sites reports public access. Desktop, dark and 390px mobile screenshots from the CI browser run were visually inspected. Screenshot capture now waits for transient notifications to disappear.
