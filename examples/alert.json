@@ -1,0 +1,8 @@
+{
+  "source_id": "example-detector:alert-001",
+  "subject": "Example customer",
+  "title": "Transfer requires investigation",
+  "category": "Transaction monitoring",
+  "risk": 45,
+  "evidence": []
+}

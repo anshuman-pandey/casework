@@ -1,0 +1,8 @@
+*
+!casework/
+!casework/**
+!LICENSE
+!THIRD_PARTY_NOTICES.md
+**/__pycache__/
+**/*.pyc
+**/*.db*

@@ -1,0 +1,23 @@
+id,url,evidence_type,retrieved_at,limitation
+S01,https://verafin.com/wp-content/uploads/2024/11/case-management-feature-sheet-nasdaq-verafin-20241128.pdf,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S02,https://ir.nasdaq.com/news-releases/news-release-details/nasdaq-verafin-announces-launch-its-agentic-ai-workforce,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S03,https://www.unit21.ai/products/case-management,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S04,https://www.unit21.ai/blog/what-shipped-in-june-the-case-investigates-itself-before-you-open-it,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S05,https://oscilar.com/solutions/case-management,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S06,https://oscilar.com/blog/oscilar-agent-hub,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S07,https://www.g2.com/products/verafin/reviews,individual user reviews,2026-11-14,Small selected samples; time/version dependent; see report for review dates
+S08,https://ai.g2.com/product/unit21,third-party AI review summary,2026-11-14,Underlying individual review text not independently inspected
+S09,https://www.g2.com/products/oscilar/reviews,individual user reviews,2026-11-14,Small selected samples; time/version dependent; see report for review dates
+S10,https://support.unit21.ai/hc/en-us/articles/10521085268884-How-to-use-Custom-Data-Filters-to-find-Cases,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S11,https://www.niceactimize.com/Documents/actone-enterprise-case-manager-brochure.pdf,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S12,https://lucinity.com/blog/lucinity-launches-copilot-plugin,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S13,https://docs.hawk.ai/,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S14,https://support.complyadvantage.com/articles/1901668528-mesh-api-faqs,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S15,https://www.sardine.ai/blog/risk-platform-updates-november-2023,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S16,https://github.com/checkmarble/marble,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S17,https://github.com/ballerine-io/ballerine,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S18,https://docs.checkmarble.com/docs/opensource-1,primary documentation / vendor claim,2026-11-14,"Documents advertised capability, not independently benchmarked performance"
+S19,https://www.elastic.co/licensing/elastic-license,license / definition,2026-11-14,Check individual component and version before reuse
+S20,https://opensource.org/osd,license / definition,2026-11-14,Check individual component and version before reuse
+S21,https://www.fincen.gov/resources/statutes-regulations/guidance/suggestions-addressing-common-errors-noted-suspicious,official guidance,2026-11-14,US-specific; not a complete current regulatory implementation specification
+S22,https://www.fincen.gov/resources/statutes-regulations/guidance/suspicious-activity-report-supporting-documentation,official guidance,2026-11-14,US-specific; not a complete current regulatory implementation specification

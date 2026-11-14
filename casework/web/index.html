@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Casework · Investigations</title>
+    <link
+      rel="preload"
+      href="/fonts/InterVariable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#detail">Skip to investigation</a>
+    <aside class="rail">
+      <a class="brand" href="/" aria-label="Casework home"
+        ><span class="mark" aria-hidden="true"
+          ><svg viewBox="0 0 28 28" fill="none">
+            <path
+              d="M20 6H10a4 4 0 0 0-4 4v10h12a4 4 0 0 0 4-4V8"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M11 12h7m-7 5h4"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            /></svg></span
+        ><strong>casework<span class="dot">.</span></strong></a
+      >
+      <div class="workspace">
+        <span class="avatar" data-icon="layers"></span>
+        <div>Sandbox<small>Development workspace</small></div>
+        <span class="workspace-lock" title="Local synthetic-data workspace"
+          >Local</span
+        >
+      </div>
+      <button id="command-button" class="command-trigger">
+        <span data-icon="search"></span><span>Search anything</span
+        ><kbd>⌘ K</kbd>
+      </button>
+      <div class="nav-label">Workspace</div>
+      <nav aria-label="Case views">
+        <button class="nav" id="start-nav">
+          <span data-icon="play"></span> Getting started
+        </button>
+        <button class="nav active" id="all-nav">
+          <span data-icon="inbox"></span> Investigations
+          <span id="nav-count" class="count">0</span></button
+        ><button class="nav" id="open-nav">
+          <span data-icon="circle"></span> Open queue</button
+        ><button class="nav" id="closed-nav">
+          <span data-icon="check-circle"></span> Closed cases
+        </button>
+      </nav>
+      <div class="rail-bottom">
+        <button
+          id="theme-button"
+          class="text-button"
+          aria-label="Switch to dark appearance"
+        >
+          <span data-icon="moon"></span
+          ><span id="theme-label">Dark appearance</span></button
+        ><button id="shortcuts-button" class="text-button">
+          <span data-icon="keyboard"></span>Keyboard shortcuts <kbd>?</kbd>
+        </button>
+        <div class="sandbox-note">
+          <span class="status-dot"></span>
+          <div>
+            Synthetic data only<small>Local prototype · Apache-2.0</small>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <main>
+      <header class="topbar">
+        <div class="breadcrumb">
+          <span data-icon="layers"></span> Sandbox <span class="slash">/</span>
+          <strong>Investigations</strong>
+        </div>
+        <div class="topbar-actions">
+          <button
+            class="text-button"
+            id="start-button"
+            aria-label="Open getting started"
+          >
+            <span data-icon="play"></span
+            ><span class="command-label">Try a scenario</span>
+          </button>
+          <button
+            class="icon-button"
+            id="mobile-theme-button"
+            aria-label="Switch to dark appearance"
+            title="Switch to dark appearance"
+          >
+            <span data-icon="moon"></span></button
+          ><button
+            class="text-button"
+            id="top-command"
+            aria-label="Open command menu"
+          >
+            <span data-icon="search"></span
+            ><span class="command-label">Commands</span> <kbd>Ctrl / ⌘ K</kbd>
+          </button>
+        </div>
+      </header>
+      <section class="heading">
+        <div>
+          <h1>Investigations <span class="workspace-badge">Sandbox</span></h1>
+          <p>Your queue. The evidence. A clear next step.</p>
+        </div>
+        <button id="import-button" class="button primary">
+          <span data-icon="plus"></span> Import alert
+        </button>
+      </section>
+      <section class="metrics" aria-label="Case counts">
+        <div>
+          <span data-icon="stack"></span><span>All cases</span
+          ><strong id="total">—</strong>
+        </div>
+        <div><span>Open</span><strong id="open-count">—</strong></div>
+        <div>
+          <span class="risk-indicator"></span><span>High source risk</span
+          ><strong id="high-count">—</strong>
+        </div>
+        <div><span>Closed</span><strong id="closed-count">—</strong></div>
+      </section>
+      <section class="workbench onboarding">
+        <div class="queue">
+          <div class="filters">
+            <label class="search"
+              ><span data-icon="search"></span
+              ><input
+                id="search"
+                type="search"
+                placeholder="Search cases…"
+                aria-label="Search cases"
+              /><kbd>/</kbd></label
+            ><select id="status-filter" aria-label="Filter by status">
+              <option value="all">All statuses</option>
+              <option value="open">Open</option>
+              <option value="closed">Closed</option>
+              <option value="escalated">Escalated</option>
+            </select>
+          </div>
+          <div class="queue-head">
+            <span>Priority queue <span id="list-count"></span></span
+            ><span>Source risk</span>
+          </div>
+          <div id="cases" class="case-list"></div>
+          <div class="queue-footer">
+            <span><kbd>J</kbd> <kbd>K</kbd> to navigate</span
+            ><span>Highest risk first</span>
+          </div>
+        </div>
+        <article
+          id="detail"
+          class="detail"
+          tabindex="-1"
+          aria-label="Investigation record"
+        >
+          <p class="empty">Preparing your workspace…</p>
+        </article>
+      </section>
+      <footer>
+        <span><span class="status-dot"></span> Local workspace</span
+        ><span>Synthetic data · No AI model connected</span>
+      </footer>
+    </main>
+    <dialog id="command-dialog" aria-label="Search and commands">
+      <div class="command-input-row">
+        <input
+          id="command-search"
+          placeholder="Search cases or find a command…"
+          aria-label="Search commands"
+          autocomplete="off"
+          role="combobox"
+          aria-expanded="true"
+          aria-controls="command-results"
+          aria-autocomplete="list"
+        /><button
+          class="text-button"
+          id="close-command"
+          aria-label="Close command menu"
+        >
+          <kbd>Esc</kbd>
+        </button>
+      </div>
+      <div id="command-results" role="listbox" aria-label="Commands"></div>
+      <div class="command-footer">
+        <span>↑ ↓ to navigate &nbsp; · &nbsp; Enter to select</span
+        ><span>Casework</span>
+      </div>
+    </dialog>
+    <dialog id="shortcuts-dialog" aria-labelledby="shortcuts-title">
+      <div class="dialog-heading">
+        <h2 id="shortcuts-title">Work without losing your place</h2>
+        <button
+          class="icon-button"
+          id="close-shortcuts"
+          aria-label="Close shortcuts"
+          data-icon="x"
+        ></button>
+      </div>
+      <dl class="shortcut-list">
+        <div>
+          <dt>Search cases and commands</dt>
+          <dd><kbd>Ctrl / ⌘ K</kbd></dd>
+        </div>
+        <div>
+          <dt>Focus case search</dt>
+          <dd><kbd>/</kbd></dd>
+        </div>
+        <div>
+          <dt>Next / previous case</dt>
+          <dd><kbd>J</kbd> <kbd>K</kbd></dd>
+        </div>
+        <div>
+          <dt>Close a dialog</dt>
+          <dd><kbd>Esc</kbd></dd>
+        </div>
+      </dl>
+      <p>
+        Shortcuts stay out of the way while you're typing. Decisions always
+        require review.
+      </p>
+    </dialog>
+    <div id="toast" role="status" hidden></div>
+    <dialog id="import-dialog" aria-labelledby="import-title">
+      <form id="import-form">
+        <div class="dialog-heading">
+          <h2 id="import-title">Bring an alert into Casework</h2>
+          <button
+            type="button"
+            class="icon-button"
+            id="cancel-import"
+            aria-label="Close import dialog"
+            data-icon="x"
+          ></button>
+        </div>
+        <p>
+          Paste a synthetic JSON alert. Reusing a source ID with the same
+          content is safe.
+        </p>
+        <label for="alert-json">Alert JSON</label
+        ><textarea
+          id="alert-json"
+          rows="15"
+          spellcheck="false"
+          required
+        ></textarea>
+        <p id="import-error" class="error" role="alert"></p>
+        <button class="button primary" type="submit">Validate & import</button>
+      </form>
+    </dialog>
+    <dialog id="decision-dialog" aria-labelledby="decision-title">
+      <form id="decision-form">
+        <div class="dialog-heading">
+          <h2 id="decision-title">Record decision</h2>
+          <button
+            type="button"
+            class="icon-button"
+            id="cancel-decision"
+            aria-label="Cancel decision"
+            data-icon="x"
+          ></button>
+        </div>
+        <p id="decision-description"></p>
+        <label for="reason">Decision rationale</label
+        ><textarea
+          id="reason"
+          rows="5"
+          maxlength="4000"
+          required
+          placeholder="Explain what you reviewed and why this action is appropriate."
+        ></textarea>
+        <p id="decision-error" class="error" role="alert"></p>
+        <button class="button primary" type="submit">Record decision</button>
+      </form>
+    </dialog>
+  </body>
+</html>

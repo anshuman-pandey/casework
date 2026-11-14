@@ -1,0 +1,19 @@
+name: Workflow improvement
+description: Propose a concrete improvement to an investigation or setup task.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Who is trying to do what, and where does the current workflow fail?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What would success look like?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence, examples or a possible contribution

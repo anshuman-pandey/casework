@@ -1,0 +1,45 @@
+name: First-run feedback
+description: Tell us where setup or the first investigation became difficult.
+title: "[First run] "
+body:
+  - type: markdown
+    attributes:
+      value: "Use synthetic data only. Share the moment you hesitated, not customer records or credentials."
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python or Docker version, and release/commit.
+    validations:
+      required: true
+  - type: dropdown
+    id: path
+    attributes:
+      label: Setup path
+      options:
+        - Python disposable demo
+        - Python persistent workspace
+        - Docker Compose
+        - Private server over SSH
+    validations:
+      required: true
+  - type: input
+    id: timing
+    attributes:
+      label: Time to a usable workspace and first exported decision
+      description: Estimates are fine; note download/build time separately.
+  - type: textarea
+    id: friction
+    attributes:
+      label: Where did you hesitate or get stuck?
+      description: Include the task, expected behavior, actual behavior and any relevant error text.
+    validations:
+      required: true
+  - type: textarea
+    id: understanding
+    attributes:
+      label: What did the policy check establish, and what did it leave for you to review?
+  - type: textarea
+    id: improvement
+    attributes:
+      label: The single change that would help you most
