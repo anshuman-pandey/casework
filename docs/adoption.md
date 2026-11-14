@@ -14,7 +14,7 @@ A new evaluator should reach this conclusion through their own actions: **“I c
 
 ## The shortest useful path
 
-Open the public demo → one fresh investigation → inspect sources → evaluate → decide with a rationale → export. No registration, provider key, schema design, connector installation or configuration wizard comes before that outcome.
+Open the public demo → one fresh investigation → open decision → Tab to accept the sample rationale → record → export. No registration, provider key, schema design, connector installation or configuration wizard comes before that outcome.
 
 The first-run screen provides one recommended action, with separate sample paths for blockers. Each sample has a stated expected outcome. New samples preserve existing work. `--demo` offers a disposable workspace; persistent native and Docker modes are separate and clearly named.
 

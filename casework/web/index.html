@@ -134,7 +134,7 @@
           <h1>Investigations <span class="workspace-badge">Sandbox</span></h1>
           <p>Your queue. The evidence. A clear next step.</p>
         </div>
-        <button id="import-button" class="button primary">
+        <button id="import-button" class="button">
           <span data-icon="plus"></span> Import alert
         </button>
       </section>
@@ -294,7 +294,9 @@
             data-icon="x"
           ></button>
         </div>
-        <p id="decision-description"></p><div class="decision-readiness"><p id="decision-readiness" role="status"></p><button type="button" class="button" id="decision-check">Check readiness to close</button></div><details class="rationale-starter"><summary>Suggested rationale <span class="suggestion-note">· Tab to use in an empty field</span></summary><p id="rationale-preview"></p><button type="button" class="button" id="use-rationale">Use this draft</button><p class="suggestion-note">Based on this record, not an AI finding. Edit it to reflect your review. Focus the empty rationale and press Tab to insert.</p></details>
+        <p id="decision-description"></p>
+        <p id="decision-readiness" role="status"></p>
+        <button id="decision-check" class="button" type="button" hidden>Retry check</button>
         <label for="reason">Decision rationale</label
         ><textarea
           id="reason"
@@ -303,6 +305,7 @@
           required
           placeholder="Explain what you reviewed and why this action is appropriate."
         ></textarea>
+        <div class="rationale-hint"><button type="button" class="text-button" id="use-rationale">Tab ↹ Use suggestion</button><span>Editable · Based on this sample</span></div>
         <p id="decision-error" class="error" role="alert"></p>
         <button id="save-decision" class="button primary" type="submit">Record decision</button>
       </form>

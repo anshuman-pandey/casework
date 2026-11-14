@@ -261,6 +261,7 @@ function renderDetail() {
         }
       }
     };
+  if ($("guide-decide")) $("guide-decide").onclick = () => $("detail").querySelector('[data-action="close"]').click();
   if ($("guide-scenarios")) $("guide-scenarios").onclick = () => showStart();
   $("detail")
     .querySelectorAll("[data-evidence]")
@@ -296,6 +297,7 @@ function renderDetail() {
     .forEach(
       (button) =>
         (button.onclick = () => {
+          decisionChecking = false;
           pendingAction = {
             id: c.id,
             version: c.version,
@@ -308,53 +310,71 @@ function renderDetail() {
           }[pendingAction.action];
           $("decision-description").textContent =
             pendingAction.action === "close"
-              ? "Review the sources and explain your decision. Readiness checks must pass before closing."
+              ? "Accept the suggested rationale or write your own."
               : "Your rationale will be saved in the case history.";
           $("reason").value = drafts.get(c.id) || "";
           $("decision-error").textContent = "";
           updateDecisionHelp();
           $("decision-dialog").showModal();
+          $("reason").focus();
+          if (pendingAction.action === "close") checkDecision();
         }),
     );
 }
+let rationaleSuggestion = "";
+let decisionChecking = false;
 function updateDecisionHelp() {
   const check = current.events.filter(e => e.kind === "policy_evaluated" && e.payload.case_version === current.version).at(-1)?.payload;
   const closing = pendingAction.action === "close";
   const blocked = check?.checks.filter(c => !c.passed) || [];
-  $("decision-check").hidden = !closing;
-  $("decision-readiness").textContent = !closing ? "Your reason will be added to the case history." : !check ? "First, check evidence coverage, freshness and source risk. You can do that here without losing your draft." : blocked.length ? "Closure is blocked. Unmet requirements: " + blocked.map(c => c.label).join("; ") + ". Cancel and escalate for further review." : "All three readiness checks pass. Review the sources and your rationale before recording a decision.";
-  $("save-decision").disabled = closing && (!check || blocked.length > 0);
+  $("decision-readiness").textContent = !closing ? "Saved to the case history." : decisionChecking ? "Checking evidence automatically…" : !check ? "Readiness check required." : blocked.length ? "Closure is blocked. Unmet requirements: " + blocked.map(c => c.label).join("; ") + ". Escalate for further review." : "✓ Checks passed. Ready to record.";
+  $("save-decision").disabled = closing && (decisionChecking || !check || blocked.length > 0);
   const labels = current.evidence.map(e => e.label).join(", ") || "no attached source records";
-  const facts = `Case: ${current.subject}. Alert: ${current.title}. Attached evidence: ${labels}. `;
-  const outcome = pendingAction.action === "reopen" ? "Reopening for further review. Follow-up needed: [describe what needs to be checked]." : pendingAction.action === "escalate" ? `Escalating for further review. ${blocked.length ? "Readiness blockers: " + blocked.map(c => c.label).join("; ") + ". " : ""}Reason and requested follow-up: [add your findings].` : `${check && !blocked.length ? "The recorded checks passed for evidence coverage, freshness and source risk. " : "Readiness checks must pass before closure. "}These checks do not establish that the activity is legitimate. My evidence-based reason for closing: [add your findings].`;
-  $("rationale-preview").textContent = facts + outcome;
+  const facts = `This synthetic investigation concerns ${current.subject}: ${current.title}. The record contains ${labels}. `;
+  rationaleSuggestion = facts + (pendingAction.action === "reopen" ? "Reopening the practice case to reassess the evidence and retain the earlier decision history." : pendingAction.action === "escalate" ? `Escalating the practice case for further review${blocked.length ? ": " + blocked.map(c => c.label).join("; ") : " of the alert and its supporting records"}.` : "Closing this practice case subject to the required evidence coverage, freshness and source-risk checks. This is a demonstration decision about synthetic data.");
+  $("reason").placeholder = rationaleSuggestion;
+  $("use-rationale").hidden = !!$("reason").value.trim();
 }
 function useRationale() {
-  if ($("reason").value.trim()) { toast("Clear your rationale first to use the suggested draft."); return; }
-  $("reason").value = $("rationale-preview").textContent;
+  if ($("reason").value.trim()) return;
+  $("reason").value = rationaleSuggestion;
   $("reason").dispatchEvent(new Event("input"));
   $("reason").focus();
-  const start = $("reason").value.indexOf("[");
-  if (start >= 0) $("reason").setSelectionRange(start, $("reason").value.indexOf("]", start) + 1);
+  $("reason").setSelectionRange($("reason").value.length, $("reason").value.length);
 }
 $("use-rationale").onclick = useRationale;
 $("reason").addEventListener("keydown", event => {
   if (event.key === "Tab" && !event.shiftKey && !$("reason").value.trim()) { event.preventDefault(); useRationale(); }
 });
-$("decision-check").onclick = async () => {
-  $("decision-check").disabled = true;
+async function checkDecision() {
+  const action = pendingAction;
+  decisionChecking = true;
+  $("decision-check").hidden = true;
   $("decision-error").textContent = "";
+  updateDecisionHelp();
   try {
-    await api(`/api/cases/${encodeURIComponent(pendingAction.id)}/evaluate`, {});
-    await loadCase(pendingAction.id, false);
-    updateDecisionHelp();
-  } catch (error) { $("decision-error").textContent = error.message; }
-  finally { $("decision-check").disabled = false; }
-};
+    await api(`/api/cases/${encodeURIComponent(action.id)}/evaluate`, {});
+    const record = await api(`/api/cases/${encodeURIComponent(action.id)}`);
+    if (pendingAction !== action || !$("decision-dialog").open) return;
+    if (record.version !== action.version) throw new Error("This case changed. Close this dialog and reopen the case before deciding.");
+    current = record;
+    renderDetail();
+  } catch (error) {
+    if (pendingAction !== action || !$("decision-dialog").open) return;
+    $("decision-error").textContent = error.message;
+    $("decision-check").hidden = false;
+  } finally {
+    if (pendingAction === action && $("decision-dialog").open) {
+      decisionChecking = false;
+      updateDecisionHelp();
+      if (!$("decision-check").hidden) $("save-decision").disabled = true;
+    }
+  }
+}
+$("decision-check").onclick = checkDecision;
 $("decision-form").onsubmit = async (event) => {
   event.preventDefault();
   const submit = event.submitter;
-  if (/\[(?:add your findings|describe what needs to be checked)\]/.test($("reason").value)) { $("decision-error").textContent = "Replace the bracketed prompt with your own findings before recording."; return; }
   submit.disabled = true;
   try {
     const result = await api(
@@ -374,6 +394,7 @@ $("decision-form").onsubmit = async (event) => {
 };
 $("reason").oninput = () => {
   if (pendingAction) drafts.set(pendingAction.id, $("reason").value);
+  $("use-rationale").hidden = !!$("reason").value.trim();
 };
 $("cancel-decision").onclick = () => $("decision-dialog").close();
 window.addEventListener("beforeunload", (event) => {
@@ -627,7 +648,7 @@ function practiceGuide(c, evaluation) {
   if (!match) return "";
   const explanations = {
     ready:
-      "Read the customer profile, compare the transaction extract, then run the policy check below. The demo checks coverage, freshness and source risk; you make the decision.",
+      "Open the decision, press Tab to accept the sample rationale, then record it. Checks run automatically; the source records are here whenever you want to inspect them.",
     "high-risk":
       "This sample has complete, fresh evidence and a high source risk score. Run the check, try closing to see the guardrail, then escalate with your rationale.",
     "missing-evidence":
@@ -658,10 +679,10 @@ function practiceGuide(c, evaluation) {
       ? "The checks passed. Your review comes next."
       : "A blocker is visible";
     body = evaluation.checks.every((check) => check.passed)
-      ? "Review the source content and record a rationale in your own words. Passing these demo checks is not a finding that the activity is legitimate."
+      ? "Accept the complete sample rationale with Tab, or edit it before recording. The evidence stays with the decision."
       : "Review the failed check below. A closure attempt will be rejected by the policy gate; you can escalate the case with a rationale.";
   }
-  return `<section class="practice-guide" aria-label="Practice guide"><div class="guide-kicker">${icon("play")} Guided practice</div><h4>${escape(title)}</h4><p>${escape(body)}</p><div class="guide-actions">${decided ? `<a class="button" href="/api/cases/${encodeURIComponent(c.id)}/export" download="${escape(c.id)}.json">${icon("download")}Download case record</a>` : `<button class="button" id="guide-next">${icon(evaluation ? "arrow-up-right" : "folder")}${evaluation ? (evaluation.checks.every((check) => check.passed) ? "Record a decision" : "Escalate with a rationale") : "Inspect the evidence"}</button>`}<button class="text-button" id="guide-scenarios">Try another scenario ${icon("arrow-up-right")}</button></div>${decided ? `<div class="completion-next"><span>${c.evidence.length} source records · Decision history preserved · Export ready</span><button class="button primary" data-self-host>Use this workflow yourself ${icon("arrow-up-right")}</button></div>` : ""}</section>`;
+  return `<section class="practice-guide" aria-label="Practice guide"><div class="guide-kicker">${icon("play")} Guided practice</div><h4>${escape(title)}</h4><p>${escape(body)}</p><div class="guide-actions">${!decided && !evaluation ? `<button class="button primary" id="guide-decide">Record a decision</button>` : ""}${decided ? `<a class="button" href="/api/cases/${encodeURIComponent(c.id)}/export" download="${escape(c.id)}.json">${icon("download")}Download case record</a>` : `<button class="button" id="guide-next">${icon(evaluation ? "arrow-up-right" : "folder")}${evaluation ? (evaluation.checks.every((check) => check.passed) ? "Record a decision" : "Escalate with a rationale") : "Inspect the evidence"}</button>`}<button class="text-button" id="guide-scenarios">Try another scenario ${icon("arrow-up-right")}</button></div>${decided ? `<div class="completion-next"><span>${c.evidence.length} source records · Decision history preserved · Export ready</span><button class="button primary" data-self-host>Use this workflow yourself ${icon("arrow-up-right")}</button></div>` : ""}</section>`;
 }
 async function showStart(navigate = true) {
   const version = ++requestVersion;
@@ -683,7 +704,7 @@ async function showStart(navigate = true) {
     if (version !== requestVersion) return;
     const first = catalog.scenarios.find((s) => s.id === "ready");
     $("detail").innerHTML =
-      `<div class="start-page"><div class="start-eyebrow">${icon("layers")} YOUR PRACTICE WORKSPACE</div><h2>Your first investigation.<br>A clear path to a decision.</h2><div class="workspace-personalize"><span class="mini-workspace-logo" data-workspace-logo>S</span><span><strong data-workspace-name>Acme Corp</strong><small>Your workspace, your identity</small></span><button class="button" data-personalize>Make it yours</button></div><p class="start-intro">Follow the evidence, check what is missing, and record a decision you can explain. Everything here is synthetic and ready to explore.</p><section class="first-investigation"><div class="start-card-icon">${icon("shield-check")}</div><div><div class="start-recommendation">START HERE</div><h3>Take one case all the way through</h3><p>${escape(first.description)}</p><ol class="start-steps"><li>Inspect evidence</li><li>Run checks</li><li>Record a decision</li><li>Export the record</li></ol><button class="button primary" data-scenario="ready">${icon("play")}Start guided investigation</button><span class="start-fresh">No signup. No API key. A real practice workflow.</span><div class="first-case-secondary"><button class="text-button" data-self-host>Or run it in your own environment ${icon("arrow-up-right")}</button></div></div></section><p id="scenario-error" class="error" role="alert"></p><div class="start-section-heading"><h3>Explore the other paths</h3><span>Real actions · Predictable sample outcomes</span></div><div class="scenario-grid">${catalog.scenarios
+      `<div class="start-page"><div class="start-eyebrow">${icon("layers")} YOUR PRACTICE WORKSPACE</div><h2>Your first investigation.<br>A clear path to a decision.</h2><div class="workspace-personalize"><span class="mini-workspace-logo" data-workspace-logo>S</span><span><strong data-workspace-name>Acme Corp</strong><small>Your workspace, your identity</small></span><button class="button" data-personalize>Make it yours</button></div><p class="start-intro">Follow the evidence, check what is missing, and record a decision you can explain. Everything here is synthetic and ready to explore.</p><section class="first-investigation"><div class="start-card-icon">${icon("shield-check")}</div><div><div class="start-recommendation">START HERE</div><h3>Take one case all the way through</h3><p>A complete sample, a ready-to-use rationale, and a downloadable decision record.</p><ol class="start-steps"><li>Open the sample</li><li>Tab to accept</li><li>Record the decision</li></ol><button class="button primary" data-scenario="ready">${icon("play")}Start guided investigation</button><span class="start-fresh">No signup. No API key. A real practice workflow.</span><div class="first-case-secondary"><button class="text-button" data-self-host>Or run it in your own environment ${icon("arrow-up-right")}</button></div></div></section><p id="scenario-error" class="error" role="alert"></p><div class="start-section-heading"><h3>Explore the other paths</h3><span>Real actions · Predictable sample outcomes</span></div><div class="scenario-grid">${catalog.scenarios
         .filter((s) => s.id !== "ready")
         .map(
           (s) =>

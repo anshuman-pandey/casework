@@ -65,3 +65,7 @@ Keep one consistent interface across deployments. Workspace name and logo are op
 ## Decision assistance and first-run defaults
 
 New workspaces start in dark appearance with an editable Acme Corp name. Saved appearance and names remain respected. A closure dialog exposes unmet prerequisites before enabling submission, with an in-dialog readiness check that preserves the draft. Suggested rationale describes attached records and observed check results; the investigator supplies their findings. Tab accepts a suggestion only in an empty field, and the next Tab moves focus normally. Content fingerprints stay in optional technical details. Import is an integration entry point with complete editable synthetic scenarios, not an automatic monitoring connector.
+
+## First useful decision without mandatory writing
+
+The synthetic walkthrough offers a complete factual demonstration rationale. The decision dialog focuses its single field; Tab accepts the inline suggestion, and Record decision saves it. Checks run automatically when opening a closure, remain authoritative at submission, and never auto-close a case. A failed check exposes retry without losing the draft. Do not reintroduce mandatory bracket prompts, duplicated suggestion panels, or successful-check buttons. Optional evidence inspection and editing remain available. Import is visually secondary to the first investigation.

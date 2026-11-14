@@ -2584,3 +2584,8 @@ form > .button {
 
 .rationale-starter > summary { cursor:pointer; font-size:12px; font-weight:550; }
 .rationale-starter > summary .suggestion-note { font-weight:400; }
+
+#decision-readiness { font-size:12px; margin:12px 0 18px; color:var(--accent-text); }
+.rationale-hint { display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:11px; color:var(--muted); margin:8px 0 16px; }
+#use-rationale[hidden],#decision-check[hidden] { display:none; }
+#reason::placeholder { opacity:0.8; }

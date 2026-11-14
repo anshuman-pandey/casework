@@ -182,25 +182,20 @@ const { execFileSync } = require("node:child_process");
       .waitFor();
     assert.equal(await page.locator(".technical-details").first().getAttribute("open"), null);
     await page.getByRole("button", {name: "Review & close", exact: true}).click();
-    assert.equal(await page.locator("#save-decision").isDisabled(), true);
-    await page.getByLabel("Decision rationale").focus();
+    // No typing, manual check, disclosure, or extra focus click is needed.
+    assert.equal(await page.locator("#reason").evaluate(el => document.activeElement === el), true);
     await page.keyboard.press("Tab");
-    assert.match(await page.getByLabel("Decision rationale").inputValue(), /Juniper Studio/);
-    await page.getByRole("button", {name: "Check readiness to close", exact: true}).click();
-    await page.getByText(/All three readiness checks pass/).waitFor();
+    const acceptedRationale = await page.getByLabel("Decision rationale").inputValue();
+    assert.match(acceptedRationale, /Juniper Studio/);
+    assert.ok(!acceptedRationale.includes("["));
+    await page.getByText("✓ Checks passed. Ready to record.").waitFor();
+    assert.equal(await page.locator("#decision-check").isVisible(), false);
     assert.equal(await page.locator("#save-decision").isEnabled(), true);
-    await page.locator("#save-decision").click();
-    await page.getByText(/Replace the bracketed prompt/).waitFor();
     await page.screenshot({path:path.join(root,"test-results/demo-decision.png")});
     await page.setViewportSize({width:390,height:900});
     assert.ok(await page.evaluate(() => document.querySelector("#decision-dialog").getBoundingClientRect().width <= innerWidth));
     await page.screenshot({path:path.join(root,"test-results/demo-decision-mobile.png")});
     await page.setViewportSize({width:1440,height:1100});
-    await page
-      .getByLabel("Decision rationale")
-      .fill(
-        "Reviewed the three synthetic sources and recorded this practice decision.",
-      );
     await page
       .getByRole("button", { name: "Record decision", exact: true })
       .click();
@@ -219,7 +214,7 @@ const { execFileSync } = require("node:child_process");
     assert.equal(record.demo_mode, "browser-sandbox");
     assert.equal(
       record.events.at(-1).payload.reason,
-      "Reviewed the three synthetic sources and recorded this practice decision.",
+      acceptedRationale,
     );
     await page.reload();
     await page
@@ -237,7 +232,7 @@ const { execFileSync } = require("node:child_process");
       .waitFor();
     assert.match(
       await page.locator("#version-download").getAttribute("href"),
-      /v0\.2\.0-preview\.2\.zip$/,
+      /v0\.2\.0-preview\.3\.zip$/,
     );
     await page.getByRole("button", { name: "Close self-host guide" }).click();
     await page.locator("#toast").waitFor({ state: "hidden" });
