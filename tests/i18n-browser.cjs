@@ -128,6 +128,7 @@ const catalogs = Object.fromEntries(languages.map(code => [code, require(`../loc
     await page.locator("#language-select").selectOption("ja");
     await page.getByRole("button",{name:catalogs.ja["Start guided investigation"],exact:true}).waitFor();
     assert.equal(await page.evaluate(() => window.caseworkI18n.t("__proto__")),"__proto__");
+    assert.deepEqual(await page.evaluate(() => ["zh-Hans-HK", "zh-Hant-CN", "zh-HK", "zh-SG"].map(window.caseworkI18n.resolveLanguage)), ["zh-Hans", "zh-Hant", "zh-Hant", "zh-Hans"]);
     await context.close();
   } finally {
     if(browser) await browser.close();

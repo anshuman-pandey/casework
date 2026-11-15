@@ -16,6 +16,19 @@ Customer and workspace names, alert titles, source categories, evidence labels a
 
 Repository documentation remains in English. Unexpected upstream or browser error details may also remain in their original language. These interface translations have automated workflow coverage, but have not had independent native-speaker review; terminology improvements are welcome.
 
+## Screenshots
+
+Captured from the running browser demo by the language workflow tests.
+
+| Language | Desktop onboarding | Mobile decision |
+|---|---|---|
+| English | [Preview](assets/language-en-desktop.png) | [Preview](assets/language-en-mobile.png) |
+| Deutsch | [Vorschau](assets/language-de-desktop.png) | [Vorschau](assets/language-de-mobile.png) |
+| Español | [Vista previa](assets/language-es-desktop.png) | [Vista previa](assets/language-es-mobile.png) |
+| 日本語 | [プレビュー](assets/language-ja-desktop.png) | [プレビュー](assets/language-ja-mobile.png) |
+| 简体中文 | [预览](assets/language-zh-Hans-desktop.png) | [预览](assets/language-zh-Hans-mobile.png) |
+| 繁體中文 | [預覽](assets/language-zh-Hant-desktop.png) | [預覽](assets/language-zh-Hant-mobile.png) |
+
 ## Improve a translation
 
 1. Edit the appropriate file in [`locales/`](../locales). English sentences are stable message keys; all six catalogs must contain the same keys. Values contain plain text, never HTML. Preserve every named placeholder such as `{count}` or `{subject}`; their position can change to suit the language.

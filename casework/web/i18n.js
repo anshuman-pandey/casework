@@ -5,6 +5,8 @@
   function resolveLanguage(value) {
     const tag = String(value || "").replaceAll("_", "-").toLowerCase();
     if (/^zh(?:-|$)/.test(tag)) {
+      if (/(?:^|-)hans(?:-|$)/.test(tag)) return "zh-Hans";
+      if (/(?:^|-)hant(?:-|$)/.test(tag)) return "zh-Hant";
       return /(?:^|-)(hant|tw|hk|mo)(?:-|$)/.test(tag) ? "zh-Hant" : "zh-Hans";
     }
     const base = tag.split("-")[0];
