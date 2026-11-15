@@ -4,14 +4,14 @@ Checked 15 November 2026 (Asia/Kolkata). No external listing has been accepted o
 
 | Channel | Status | Ready material / next requirement |
 |---|---|---|
-| [Awesome Financial Crime](https://github.com/SKR-35/Awesome-Financial-Crime) | Blocked: GitHub rejected fork creation and issue submission with HTTP 403, Resource not accessible by integration | [Patch](financial-crime.patch), [proposal](financial-crime-issue.md). Existing Case Management & Investigation section; no new section needed. |
-| [Awesome Open Source SaaS Alternatives](https://github.com/Anil-matcha/awesome-open-source-saas-alternatives) | Blocked: GitHub rejected its supported issue-to-PR submission with HTTP 403 | [Issue body](alternatives-issue.md), [validated patch](saas-alternatives.patch). One Casework entry against Unit21; preview scope explicit. |
+| [Awesome Financial Crime](https://github.com/SKR-35/Awesome-Financial-Crime) | Submitted by maintainer: [issue #18](https://github.com/SKR-35/Awesome-Financial-Crime/issues/18), open | [Patch](financial-crime.patch), [proposal](financial-crime-issue.md). Existing Case Management & Investigation section; no new section needed. |
+| [Awesome Open Source SaaS Alternatives](https://github.com/Anil-matcha/awesome-open-source-saas-alternatives) | Submitted by maintainer: [issue #483](https://github.com/Anil-matcha/awesome-open-source-saas-alternatives/issues/483), open | [Issue body](alternatives-issue.md), [validated patch](saas-alternatives.patch). One Casework entry against Unit21; preview scope explicit. |
 | [OpenAlternative](https://openalternative.co/submit) | Not submitted: sign-in required; browser runtime unavailable | [Submission copy](openalternative.md). Approval populates its GitHub list automatically. |
 | [n8n templates](https://creators.n8n.io/) | Real n8n 2.47.7 execution passed; portal submission blocked by unavailable browser/account access | [Template submission](n8n-submission.md), [working example](../../examples/n8n/README.md). |
 | [Awesome Selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted-data/blob/master/CONTRIBUTING.md) | Deferred: first release must be more than four months old | Recheck after 15 March 2027, based on the November 2026 first release. Age alone does not guarantee suitability. No automatic submission scheduled. |
 | [Runa Capital alternatives](https://github.com/RunaCapital/awesome-oss-alternatives#criteria) | Deferred: requires 100+ stars and a qualifying private for-profit company | Recheck real traction and company eligibility. Do not claim that these criteria are met. |
 | [Awesome OSS](https://github.com/sereneblue/awesome-oss/blob/master/CONTRIBUTING.md) | Deferred: requires 100+ stars and active development | Recheck organic adoption; no submission sent. |
-| [Moov Awesome Fintech](https://github.com/moov-io/awesome-fintech) | Deferred: production-grade adoption expected | Current synthetic-data preview is not a production-grade deployment. |
+| [Moov Awesome Fintech](https://github.com/moov-io/awesome-fintech) | Submitted by maintainer: [PR #128](https://github.com/moov-io/awesome-fintech/pull/128), open and unmerged | Preview status and unmet adoption expectations disclosed. Issues are disabled; submission uses the maintainer’s fork. |
 
 ## Apply a prepared PR
 
