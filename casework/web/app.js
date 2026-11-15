@@ -1,3 +1,4 @@
+const { t, error: localizedError } = window.caseworkI18n;
 // Small, original outline icons share a 24-unit grid and 1.6-unit stroke.
 const iconPaths = {
   search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/>',
@@ -104,17 +105,17 @@ async function api(path, body) {
         },
   );
   const result = await response.json();
-  if (!response.ok) throw new Error(result.error || "Request failed");
+  if (!response.ok) throw new Error(result.error || t("Request failed"));
   return result;
 }
 function toast(message) {
-  $("toast").textContent = message;
+  $("toast").textContent = localizedError(message);
   $("toast").hidden = false;
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => ($("toast").hidden = true), 5000);
 }
 const date = (value) =>
-  new Date(value).toLocaleString(undefined, {
+  new Date(value).toLocaleString(window.caseworkI18n.locale, {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -129,10 +130,10 @@ function renderQueue() {
     ? filtered
         .map(
           (c) =>
-            `<button class="case-row ${c.id === selected ? "selected" : ""}" data-id="${escape(c.id)}" aria-pressed="${c.id === selected}"><span class="row-top"><span class="row-state status-${escape(c.status)}">${icon(c.status === "closed" ? "check-circle" : c.status === "escalated" ? "arrow-up-right" : "circle")}</span><span class="row-id">${escape(c.id)}</span><span class="risk ${c.risk >= 70 ? "high" : c.risk >= 30 ? "medium" : "low"}">${c.risk}</span></span><span class="case-copy"><strong>${escape(c.subject)}</strong><span class="row-trigger">${escape(c.title)}</span></span><span class="row-bottom"><span class="category-tag">${escape(c.category)}</span><span class="row-status">${escape(c.status)}</span></span></button>`,
+            `<button class="case-row ${c.id === selected ? "selected" : ""}" data-id="${escape(c.id)}" aria-pressed="${c.id === selected}"><span class="row-top"><span class="row-state status-${escape(c.status)}">${icon(c.status === "closed" ? "check-circle" : c.status === "escalated" ? "arrow-up-right" : "circle")}</span><span class="row-id">${escape(c.id)}</span><span class="risk ${c.risk >= 70 ? "high" : c.risk >= 30 ? "medium" : "low"}">${c.risk}</span></span><span class="case-copy"><strong>${escape(c.subject)}</strong><span class="row-trigger">${escape(c.title)}</span></span><span class="row-bottom"><span class="category-tag">${escape(c.category)}</span><span class="row-status">${escape(t(c.status))}</span></span></button>`,
         )
         .join("")
-    : `<div class="empty"><span class="empty-icon">${icon("search")}</span><strong>No cases match these filters.</strong><p>Try a different search or import an alert.</p></div>`;
+    : `<div class="empty"><span class="empty-icon">${icon("search")}</span><strong>${escape(t("No cases match these filters."))}</strong><p>${escape(t("Try a different search or import an alert."))}</p></div>`;
   $("cases")
     .querySelectorAll("[data-id]")
     .forEach((b) => {
@@ -176,7 +177,7 @@ async function loadCase(id, navigate = true) {
   renderQueue();
   $("detail").setAttribute("aria-busy", "true");
   $("detail").innerHTML =
-    '<div class="loading-state" role="status"><span class="loading-dot"></span> Loading investigation…</div>';
+    `<div class="loading-state" role="status"><span class="loading-dot"></span> ${escape(t("Loading investigation…"))}</div>`;
   try {
     const result = await api(`/api/cases/${encodeURIComponent(id)}`);
     if (version !== requestVersion) return;
@@ -187,7 +188,7 @@ async function loadCase(id, navigate = true) {
   } catch (error) {
     if (version !== requestVersion) return;
     $("detail").innerHTML =
-      `<div class="empty"><h3>We couldn't open this case</h3><p>${escape(error.message)}</p><button class="button" id="retry-case">Try again</button></div>`;
+      `<div class="empty"><h3>${escape(t("We couldn't open this case"))}</h3><p>${escape(localizedError(error.message))}</p><button class="button" id="retry-case">${escape(t("Try again"))}</button></div>`;
     $("retry-case").onclick = () => loadCase(id, navigate);
   } finally {
     if (version === requestVersion) $("detail").removeAttribute("aria-busy");
@@ -205,40 +206,40 @@ function renderDetail() {
   const riskClass = c.risk >= 70 ? "high" : c.risk >= 30 ? "medium" : "low";
   const ordered = visibleCases(),
     position = ordered.findIndex((item) => item.id === c.id);
-  const status = `<span class="pill status-${escape(c.status)}">${icon(c.status === "closed" ? "check-circle" : c.status === "escalated" ? "arrow-up-right" : "circle")}${escape(c.status)}</span>`;
+  const status = `<span class="pill status-${escape(c.status)}">${icon(c.status === "closed" ? "check-circle" : c.status === "escalated" ? "arrow-up-right" : "circle")}${escape(t(c.status))}</span>`;
   $("detail").innerHTML = `
-    <div class="case-toolbar"><div class="case-location">${icon("file")}<span class="case-id">${escape(c.id)}</span>${status}</div><div class="case-tools"><button class="icon-button" id="copy-case-link" aria-label="Copy case link" title="Copy case link">${icon("link")}</button><span class="tool-divider"></span><button class="icon-button" id="previous-case" aria-label="Previous case" title="Previous case (K)" ${position <= 0 ? "disabled" : ""}>${icon("chevron-up")}</button><button class="icon-button" id="next-case" aria-label="Next case" title="Next case (J)" ${position >= ordered.length - 1 ? "disabled" : ""}>${icon("chevron-down")}</button></div></div>
+    <div class="case-toolbar"><div class="case-location">${icon("file")}<span class="case-id">${escape(c.id)}</span>${status}</div><div class="case-tools"><button class="icon-button" id="copy-case-link" aria-label="${escape(t("Copy case link"))}" title="${escape(t("Copy case link"))}">${icon("link")}</button><span class="tool-divider"></span><button class="icon-button" id="previous-case" aria-label="${escape(t("Previous case"))}" title="${escape(t("Previous case (K)"))}" ${position <= 0 ? "disabled" : ""}>${icon("chevron-up")}</button><button class="icon-button" id="next-case" aria-label="${escape(t("Next case"))}" title="${escape(t("Next case (J)"))}" ${position >= ordered.length - 1 ? "disabled" : ""}>${icon("chevron-down")}</button></div></div>
     <div class="case-layout"><div class="case-document">
       ${practiceGuide(c, evaluation)}
-      <div class="document-heading"><span class="eyebrow">Investigation</span><h3>${escape(c.subject)}</h3><p class="document-subtitle">${escape(c.category)}<span class="middle-dot">·</span>Created ${escape(date(c.created_at))}</p></div>
-      <div class="trigger"><span class="trigger-icon">${icon("flag")}</span><div><span class="trigger-label">Why this case was opened</span><p>${escape(c.title)}</p></div></div>
-      <div class="section-label">${icon("folder")} Evidence <span class="section-count">${c.evidence.length}</span><span class="section-note">Source records</span></div>
-      <div class="evidence-grid">${c.evidence.length ? c.evidence.map((e) => `<details class="evidence" data-evidence="${escape(e.id)}" ${expandedEvidence.get(c.id)?.has(e.id) ? "open" : ""}><summary><span class="evidence-icon">${icon(e.kind === "identity" ? "contact" : e.kind === "transactions" ? "receipt" : "shield")}</span><span class="evidence-summary"><strong>${escape(e.label)}</strong><span>${escape(e.source)}</span></span><span class="evidence-kind">${escape(e.kind)}</span>${icon("chevron-right")}</summary><div class="evidence-content"><p>${escape(e.detail)}</p><dl class="evidence-meta"><div><dt>Reference</dt><dd>${escape(e.id)}</dd></div><div><dt>Observed</dt><dd>${escape(e.observed_at)}</dd></div></dl><details class="technical-details"><summary>Technical details</summary><p>Content fingerprint (SHA-256). Useful when comparing exports; it does not verify the source or establish independent audit integrity.</p><code>${escape(e.sha256)}</code></details></div></details>`).join("") : `<div class="empty-evidence">${icon("folder")}<strong>No evidence attached</strong><p>This case needs source records before it can be evaluated for closure.</p></div>`}</div>
-      <div class="policy-box"><div class="policy-head"><div class="policy-title"><span class="policy-icon">${icon("shield-check")}</span><div><strong>Evidence readiness</strong><span>Demo policy · human review required</span></div></div>${evaluation ? `<span class="evaluation-status ${passed === 3 ? "passed" : "blocked"}">${icon(passed === 3 ? "check-circle" : "circle")}${passed} of 3 checks passed</span>` : '<span class="evaluation-status">Not evaluated</span>'}</div>
-        ${evaluation ? `<div class="checks">${evaluation.checks.map((check) => `<div class="check ${check.passed ? "" : "fail"}">${icon(check.passed ? "check-circle" : "circle")}<span>${escape(check.label)}</span></div>`).join("")}</div><p class="policy-explanation">${escape(evaluation.explanation)}</p>` : '<p class="policy-explanation">Check evidence coverage, freshness and the source risk threshold. This does not verify evidence content or determine whether activity is suspicious.</p>'}
-        <div class="policy-footer"><span>${icon("lock")} Deterministic checks</span>${c.status === "open" ? `<button id="evaluate" class="button">${icon("play")}Run policy check</button>` : '<span class="pill">Decision recorded</span>'}</div>
+      <div class="document-heading"><span class="eyebrow">${escape(t("Investigation"))}</span><h3>${escape(c.subject)}</h3><p class="document-subtitle">${escape(c.category)}<span class="middle-dot">·</span>${escape(t("Created {date}", {date: date(c.created_at)}))}</p></div>
+      <div class="trigger"><span class="trigger-icon">${icon("flag")}</span><div><span class="trigger-label">${escape(t("Why this case was opened"))}</span><p>${escape(c.title)}</p></div></div>
+      <div class="section-label">${icon("folder")} ${escape(t("Evidence"))} <span class="section-count">${c.evidence.length}</span><span class="section-note">${escape(t("Source records"))}</span></div>
+      <div class="evidence-grid">${c.evidence.length ? c.evidence.map((e) => `<details class="evidence" data-evidence="${escape(e.id)}" ${expandedEvidence.get(c.id)?.has(e.id) ? "open" : ""}><summary><span class="evidence-icon">${icon(e.kind === "identity" ? "contact" : e.kind === "transactions" ? "receipt" : "shield")}</span><span class="evidence-summary"><strong>${escape(e.label)}</strong><span>${escape(e.source)}</span></span><span class="evidence-kind">${escape(t(e.kind))}</span>${icon("chevron-right")}</summary><div class="evidence-content"><p>${escape(e.detail)}</p><dl class="evidence-meta"><div><dt>${escape(t("Reference"))}</dt><dd>${escape(e.id)}</dd></div><div><dt>${escape(t("Observed"))}</dt><dd>${escape(e.observed_at)}</dd></div></dl><details class="technical-details"><summary>${escape(t("Technical details"))}</summary><p>${escape(t("Content fingerprint (SHA-256). Useful when comparing exports; it does not verify the source or establish independent audit integrity."))}</p><code>${escape(e.sha256)}</code></details></div></details>`).join("") : `<div class="empty-evidence">${icon("folder")}<strong>${escape(t("No evidence attached"))}</strong><p>${escape(t("This case needs source records before it can be evaluated for closure."))}</p></div>`}</div>
+      <div class="policy-box"><div class="policy-head"><div class="policy-title"><span class="policy-icon">${icon("shield-check")}</span><div><strong>${escape(t("Evidence readiness"))}</strong><span>${escape(t("Demo policy · human review required"))}</span></div></div>${evaluation ? `<span class="evaluation-status ${passed === 3 ? "passed" : "blocked"}">${icon(passed === 3 ? "check-circle" : "circle")}${escape(t("{count} of 3 checks passed", {count: passed}))}</span>` : `<span class="evaluation-status">${escape(t("Not evaluated"))}</span>`}</div>
+        ${evaluation ? `<div class="checks">${evaluation.checks.map((check) => `<div class="check ${check.passed ? "" : "fail"}">${icon(check.passed ? "check-circle" : "circle")}<span>${escape(t(check.label))}</span></div>`).join("")}</div><p class="policy-explanation">${escape(t(evaluation.explanation))}</p>` : `<p class="policy-explanation">${escape(t("Check evidence coverage, freshness and the source risk threshold. This does not verify evidence content or determine whether activity is suspicious."))}</p>`}
+        <div class="policy-footer"><span>${icon("lock")} ${escape(t("Deterministic checks"))}</span>${c.status === "open" ? `<button id="evaluate" class="button">${icon("play")}${escape(t("Run policy check"))}</button>` : `<span class="pill">${escape(t("Decision recorded"))}</span>`}</div>
       </div>
-      <div class="decision-actions">${c.status === "open" ? `<button class="button primary" data-action="close">${icon("check")}Review & close</button><button class="button" data-action="escalate">${icon("arrow-up-right")}Escalate case</button>` : `<button class="button" data-action="reopen">${icon("refresh")}Reopen investigation</button>`}<span class="decision-note">${icon("history")} Every decision leaves a record</span></div>
-      <div class="section-label activity-label">${icon("activity")} Activity <span class="section-count">${c.events.length}</span><span class="section-note">Version ${c.version}</span></div><ol class="history">${c.events
+      <div class="decision-actions">${c.status === "open" ? `<button class="button primary" data-action="close">${icon("check")}${escape(t("Review & close"))}</button><button class="button" data-action="escalate">${icon("arrow-up-right")}${escape(t("Escalate case"))}</button>` : `<button class="button" data-action="reopen">${icon("refresh")}${escape(t("Reopen investigation"))}</button>`}<span class="decision-note">${icon("history")} ${escape(t("Every decision leaves a record"))}</span></div>
+      <div class="section-label activity-label">${icon("activity")} ${escape(t("Activity"))} <span class="section-count">${c.events.length}</span><span class="section-note">${escape(t("Version {version}", {version: c.version}))}</span></div><ol class="history">${c.events
         .slice()
         .reverse()
         .map(
           (e) =>
-            `<li><span class="event-icon">${icon(e.kind === "policy_evaluated" ? "shield-check" : e.kind === "ingested" ? "inbox" : "check")}</span><div><strong>${escape({ ingested: "Alert imported", policy_evaluated: "Policy evaluation recorded", close: "Case closed", escalate: "Case escalated", reopen: "Investigation reopened" }[e.kind] || e.kind)}</strong><small title="${escape(e.at)}">${escape(e.payload.actor || e.payload.policy || "local-demo")}<span class="middle-dot">·</span>${escape(date(e.at))}</small>${e.payload.reason ? `<p>${escape(e.payload.reason)}</p>` : ""}</div></li>`,
+            `<li><span class="event-icon">${icon(e.kind === "policy_evaluated" ? "shield-check" : e.kind === "ingested" ? "inbox" : "check")}</span><div><strong>${escape({ ingested: t("Alert imported"), policy_evaluated: t("Policy evaluation recorded"), close: t("Case closed"), escalate: t("Case escalated"), reopen: t("Investigation reopened") }[e.kind] || e.kind)}</strong><small title="${escape(e.at)}">${escape(e.payload.actor || e.payload.policy || "local-demo")}<span class="middle-dot">·</span>${escape(date(e.at))}</small>${e.payload.reason ? `<p>${escape(e.payload.reason)}</p>` : ""}</div></li>`,
         )
         .join("")}</ol>
-    </div><aside class="case-inspector" aria-label="Case properties"><h4>Properties</h4><dl class="properties"><div><dt>${icon("circle")}Status</dt><dd>${status}</dd></div><div><dt>${icon("signal")}Source risk</dt><dd><span class="risk ${riskClass}">${c.risk}<span>/ 100</span></span><small>Provided by the source.<br>Not a finding of suspicious activity.</small></dd></div><div><dt>${icon("stack")}Case type</dt><dd>${escape(c.category)}</dd></div><div><dt>${icon("calendar")}Created</dt><dd title="${escape(c.created_at)}">${escape(date(c.created_at))}</dd></div><div><dt>${icon("link")}Source ID</dt><dd class="mono">${escape(c.source_id)}</dd></div></dl>
-    <div class="inspector-section"><h4>Case record</h4><p>Evidence, evaluations and decision history in one portable record.</p><a class="export" href="/api/cases/${encodeURIComponent(c.id)}/export" download="${escape(c.id)}.json">${icon("download")}Export JSON${icon("arrow-up-right")}</a></div><div class="inspector-note">${icon("lock")}<p>${window.caseworkDemo ? "Browser sandbox" : "Local sandbox"}<br><span>Synthetic records only</span></p></div></aside></div>`;
+    </div><aside class="case-inspector" aria-label="${escape(t("Case properties"))}"><h4>${escape(t("Properties"))}</h4><dl class="properties"><div><dt>${icon("circle")}${escape(t("Status"))}</dt><dd>${status}</dd></div><div><dt>${icon("signal")}${escape(t("Source risk"))}</dt><dd><span class="risk ${riskClass}">${c.risk}<span>/ 100</span></span><small>${escape(t("Provided by the source."))}<br>${escape(t("Not a finding of suspicious activity."))}</small></dd></div><div><dt>${icon("stack")}${escape(t("Case type"))}</dt><dd>${escape(c.category)}</dd></div><div><dt>${icon("calendar")}${escape(t("Created"))}</dt><dd title="${escape(c.created_at)}">${escape(date(c.created_at))}</dd></div><div><dt>${icon("link")}${escape(t("Source ID"))}</dt><dd class="mono">${escape(c.source_id)}</dd></div></dl>
+    <div class="inspector-section"><h4>${escape(t("Case record"))}</h4><p>${escape(t("Evidence, evaluations and decision history in one portable record."))}</p><a class="export" href="/api/cases/${encodeURIComponent(c.id)}/export" download="${escape(c.id)}.json">${icon("download")}${escape(t("Export JSON"))}${icon("arrow-up-right")}</a></div><div class="inspector-note">${icon("lock")}<p>${window.caseworkDemo ? t("Browser sandbox") : t("Local sandbox")}<br><span>${escape(t("Synthetic records only"))}</span></p></div></aside></div>`;
   $("copy-case-link").onclick = async () => {
     try {
       await navigator.clipboard.writeText(`${location.origin}/#${c.id}`);
       toast(
         window.caseworkDemo
-          ? "Case link copied. It opens only in this tab’s practice session."
-          : "Case link copied.",
+          ? t("Case link copied. It opens only in this tab’s practice session.")
+          : t("Case link copied."),
       );
     } catch {
-      toast("Could not copy. You can copy the case URL from the address bar.");
+      toast(t("Could not copy. You can copy the case URL from the address bar."));
     }
   };
   $("previous-case").onclick = () => adjacentCase(-1);
@@ -278,18 +279,18 @@ function renderDetail() {
   if (run)
     run.onclick = async () => {
       run.disabled = true;
-      run.textContent = "Checking evidence…";
+      run.textContent = t("Checking evidence…");
       try {
         await api(`/api/cases/${encodeURIComponent(c.id)}/evaluate`, {});
         if (selected === c.id) {
           await loadCase(c.id, false);
           $("evaluate")?.focus({ preventScroll: true });
         }
-        toast("Policy check recorded. Review each result before deciding.");
+        toast(t("Policy check recorded. Review each result before deciding."));
       } catch (e) {
-        toast(e.message);
+        toaslocalizedError(e.message);
         run.disabled = false;
-        run.innerHTML = icon("play") + "Run policy check";
+        run.innerHTML = icon("play") + t("Run policy check");
       }
     };
   $("detail")
@@ -304,14 +305,14 @@ function renderDetail() {
             action: button.dataset.action,
           };
           $("decision-title").textContent = {
-            close: "Review & close this case",
-            escalate: "Escalate this investigation",
-            reopen: "Reopen this investigation",
+            close: t("Review & close this case"),
+            escalate: t("Escalate this investigation"),
+            reopen: t("Reopen this investigation"),
           }[pendingAction.action];
           $("decision-description").textContent =
             pendingAction.action === "close"
-              ? "Accept the suggested rationale or write your own."
-              : "Your rationale will be saved in the case history.";
+              ? t("Accept the suggested rationale or write your own.")
+              : t("Your rationale will be saved in the case history.");
           $("reason").value = drafts.get(c.id) || "";
           $("decision-error").textContent = "";
           updateDecisionHelp();
@@ -327,11 +328,11 @@ function updateDecisionHelp() {
   const check = current.events.filter(e => e.kind === "policy_evaluated" && e.payload.case_version === current.version).at(-1)?.payload;
   const closing = pendingAction.action === "close";
   const blocked = check?.checks.filter(c => !c.passed) || [];
-  $("decision-readiness").textContent = !closing ? "Saved to the case history." : decisionChecking ? "Checking evidence automatically…" : !check ? "Readiness check required." : blocked.length ? "Closure is blocked. Unmet requirements: " + blocked.map(c => c.label).join("; ") + ". Escalate for further review." : "✓ Checks passed. Ready to record.";
+  $("decision-readiness").textContent = !closing ? t("Saved to the case history.") : decisionChecking ? t("Checking evidence automatically…") : !check ? t("Readiness check required.") : blocked.length ? t("Closure is blocked. Unmet requirements: {checks}. Escalate for further review.", {checks: blocked.map(c => t(c.label)).join("; ")}) : t("✓ Checks passed. Ready to record.");
   $("save-decision").disabled = closing && (decisionChecking || !check || blocked.length > 0);
-  const labels = current.evidence.map(e => e.label).join(", ") || "no attached source records";
-  const facts = `This synthetic investigation concerns ${current.subject}: ${current.title}. The record contains ${labels}. `;
-  rationaleSuggestion = facts + (pendingAction.action === "reopen" ? "Reopening the practice case to reassess the evidence and retain the earlier decision history." : pendingAction.action === "escalate" ? `Escalating the practice case for further review${blocked.length ? ": " + blocked.map(c => c.label).join("; ") : " of the alert and its supporting records"}.` : "Closing this practice case subject to the required evidence coverage, freshness and source-risk checks. This is a demonstration decision about synthetic data.");
+  const labels = current.evidence.map(e => e.label).join(", ") || t("no attached source records");
+  const facts = t("This synthetic investigation concerns {subject}: {title}. The record contains {sources}.", {subject: current.subject, title: current.title, sources: labels}) + " ";
+  rationaleSuggestion = facts + (pendingAction.action === "reopen" ? t("Reopening the practice case to reassess the evidence and retain the earlier decision history.") : pendingAction.action === "escalate" ? t("Escalating the practice case for further review: {checks}.", {checks: blocked.length ? blocked.map(c => t(c.label)).join("; ") : t("the alert and its supporting records")}) : t("Closing this practice case subject to the required evidence coverage, freshness and source-risk checks. This is a demonstration decision about synthetic data."));
   $("reason").placeholder = rationaleSuggestion;
   $("use-rationale").hidden = !!$("reason").value.trim();
 }
@@ -356,18 +357,18 @@ async function checkDecision() {
     await api(`/api/cases/${encodeURIComponent(action.id)}/evaluate`, {});
     const record = await api(`/api/cases/${encodeURIComponent(action.id)}`);
     if (pendingAction !== action || !$("decision-dialog").open) return;
-    if (record.version !== action.version) throw new Error("This case changed. Close this dialog and reopen the case before deciding.");
+    if (record.version !== action.version) throw new Error(t("This case changed. Close this dialog and reopen the case before deciding."));
     current = record;
     renderDetail();
   } catch (error) {
     if (pendingAction !== action || !$("decision-dialog").open) return;
-    $("decision-error").textContent = error.message;
+    $("decision-error").textContent = localizedError(error.message);
     $("decision-check").hidden = false;
   } finally {
     if (pendingAction === action && $("decision-dialog").open) {
       decisionChecking = false;
       updateDecisionHelp();
-      if (!$("decision-check").hidden) { $("save-decision").disabled = true; $("decision-readiness").textContent = "Could not check readiness. Retry to continue."; }
+      if (!$("decision-check").hidden) { $("save-decision").disabled = true; $("decision-readiness").textContent = t("Could not check readiness. Retry to continue."); }
     }
   }
 }
@@ -385,9 +386,9 @@ $("decision-form").onsubmit = async (event) => {
     $("decision-dialog").close();
     await refresh();
     if (selected === result.id) await loadCase(result.id, false);
-    toast("Decision saved with its rationale.");
+    toast(t("Decision saved with its rationale."));
   } catch (e) {
-    $("decision-error").textContent = e.message;
+    $("decision-error").textContent = localizedError(e.message);
   } finally {
     submit.disabled = false;
   }
@@ -426,7 +427,7 @@ $("status-filter").onchange = renderQueue;
         showingStart = false;
         document.querySelector(".workbench").classList.remove("onboarding");
         $("detail").innerHTML =
-          '<div class="empty"><h3>No cases in this view</h3><p>Choose another status or use Getting started to add a sample.</p></div>';
+          `<div class="empty"><h3>${escape(t("No cases in this view"))}</h3><p>${escape(t("Choose another status or use Getting started to add a sample."))}</p></div>`;
       }
       renderQueue();
     }),
@@ -456,7 +457,10 @@ $("import-form").onsubmit = async (event) => {
   const submit = event.submitter;
   submit.disabled = true;
   try {
-    const result = await api("/api/alerts", JSON.parse($("alert-json").value));
+    let payload;
+    try { payload = JSON.parse($("alert-json").value); }
+    catch { throw new Error(t("Invalid JSON. Check the alert syntax and try again.")); }
+    const result = await api("/api/alerts", payload);
     $("import-dialog").close();
     $("status-filter").value = "all";
     $("search").value = "";
@@ -464,11 +468,11 @@ $("import-form").onsubmit = async (event) => {
     await loadCase(result.id);
     toast(
       result.created
-        ? "Alert imported."
-        : "Existing alert found; no duplicate created.",
+        ? t("Alert imported.")
+        : t("Existing alert found; no duplicate created."),
     );
   } catch (e) {
-    $("import-error").textContent = e.message;
+    $("import-error").textContent = localizedError(e.message);
   } finally {
     submit.disabled = false;
   }
@@ -480,38 +484,38 @@ function renderCommands() {
   const query = $("command-search").value.trim().toLowerCase();
   const actions = [
     {
-      label: "Getting started and sample scenarios",
-      hint: "Learn",
+      label: t("Getting started and sample scenarios"),
+      hint: t("Learn"),
       run: () => showStart(),
     },
     {
-      label: "Import alert",
-      hint: "Create",
+      label: t("Import alert"),
+      hint: t("Create"),
       run: () => $("import-button").click(),
     },
     {
-      label: "Show open cases",
-      hint: "View",
+      label: t("Show open cases"),
+      hint: t("View"),
       run: () => $("open-nav").click(),
     },
     {
-      label: "Show all investigations",
-      hint: "View",
+      label: t("Show all investigations"),
+      hint: t("View"),
       run: () => $("all-nav").click(),
     },
     {
-      label: "Show closed cases",
-      hint: "View",
+      label: t("Show closed cases"),
+      hint: t("View"),
       run: () => $("closed-nav").click(),
     },
     {
-      label: "Keyboard shortcuts",
-      hint: "Help",
+      label: t("Keyboard shortcuts"),
+      hint: t("Help"),
       run: () => $("shortcuts-dialog").showModal(),
     },
     {
-      label: `Switch to ${document.documentElement.dataset.theme === "dark" ? "light" : "dark"} appearance`,
-      hint: "Appearance",
+      label: t(document.documentElement.dataset.theme === "dark" ? "Switch to light appearance" : "Switch to dark appearance"),
+      hint: t("Appearance"),
       run: toggleTheme,
     },
   ];
@@ -519,7 +523,7 @@ function renderCommands() {
     ...actions,
     ...cases.map((c) => ({
       label: c.subject,
-      hint: c.status,
+      hint: t(c.status),
       search: c.title,
       run: () => {
         $("status-filter").value = "all";
@@ -538,7 +542,7 @@ function renderCommands() {
             `<div role="option" id="command-${index}" aria-selected="${index === commandIndex}" class="command-option ${index === commandIndex ? "chosen" : ""}" data-command="${index}"><span>${escape(item.label)}</span><small>${escape(item.hint)}</small></div>`,
         )
         .join("")
-    : '<p class="empty">No matching cases or commands.</p>';
+    : `<p class="empty">${escape(t("No matching cases or commands."))}</p>`;
   if (commandItems.length)
     $("command-search").setAttribute(
       "aria-activedescendant",
@@ -648,41 +652,41 @@ function practiceGuide(c, evaluation) {
   if (!match) return "";
   const explanations = {
     ready:
-      "Open the decision, press Tab to accept the sample rationale, then record it. Checks run automatically; the source records are here whenever you want to inspect them.",
+      t("Open the decision, press Tab to accept the sample rationale, then record it. Checks run automatically; the source records are here whenever you want to inspect them."),
     "high-risk":
-      "This sample has complete, fresh evidence and a high source risk score. Run the check, try closing to see the guardrail, then escalate with your rationale.",
+      t("This sample has complete, fresh evidence and a high source risk score. Run the check, try closing to see the guardrail, then escalate with your rationale."),
     "missing-evidence":
-      "The screening record is missing. Inspect the sources and run the check: a low source risk score cannot replace missing evidence.",
+      t("The screening record is missing. Inspect the sources and run the check: a low source risk score cannot replace missing evidence."),
     "stale-evidence":
-      "Open the screening snapshot and inspect its observation time. It is 48 hours old; the demo policy allows 24 hours.",
+      t("Open the screening snapshot and inspect its observation time. It is 48 hours old; the demo policy allows 24 hours."),
     "future-evidence":
-      "The screening timestamp is one hour in the future. Run the check to see how a source clock problem blocks closure.",
+      t("The screening timestamp is one hour in the future. Run the check to see how a source clock problem blocks closure."),
     history:
-      "This sample already has a recorded evaluation and closure. Export the record, then reopen it. The prior history remains; another closure needs a fresh evaluation.",
+      t("This sample already has a recorded evaluation and closure. Export the record, then reopen it. The prior history remains; another closure needs a fresh evaluation."),
   };
   const decided = c.status !== "open";
   const reopened = c.events.some((event) => event.kind === "reopen");
-  let title = "Follow a case from evidence to decision",
+  let title = t("Follow a case from evidence to decision"),
     body = explanations[match[1]];
   if (reopened) {
-    title = "The history stays with the case";
+    title = t("The history stays with the case");
     body =
-      "Your earlier decision is still in Activity. Run a new evaluation before deciding again; the previous evaluation does not authorize a new closure.";
+      t("Your earlier decision is still in Activity. Run a new evaluation before deciding again; the previous evaluation does not authorize a new closure.");
   } else if (decided) {
-    title = "Your decision is in the record";
+    title = t("Your decision is in the record");
     body =
       match[1] === "history"
         ? explanations.history
-        : "Your rationale and the evidence are preserved together. Download the record to inspect it, or reopen the case to continue the investigation.";
+        : t("Your rationale and the evidence are preserved together. Download the record to inspect it, or reopen the case to continue the investigation.");
   } else if (evaluation) {
     title = evaluation.checks.every((check) => check.passed)
-      ? "The checks passed. Your review comes next."
-      : "A blocker is visible";
+      ? t("The checks passed. Your review comes next.")
+      : t("A blocker is visible");
     body = evaluation.checks.every((check) => check.passed)
-      ? "Accept the complete sample rationale with Tab, or edit it before recording. The evidence stays with the decision."
-      : "Review the failed check below. A closure attempt will be rejected by the policy gate; you can escalate the case with a rationale.";
+      ? t("Accept the complete sample rationale with Tab, or edit it before recording. The evidence stays with the decision.")
+      : t("Review the failed check below. A closure attempt will be rejected by the policy gate; you can escalate the case with a rationale.");
   }
-  return `<section class="practice-guide" aria-label="Practice guide"><div class="guide-kicker">${icon("play")} Guided practice</div><h4>${escape(title)}</h4><p>${escape(body)}</p><div class="guide-actions">${!decided && !evaluation ? `<button class="button primary" id="guide-decide">Record a decision</button>` : ""}${decided ? `<a class="button" href="/api/cases/${encodeURIComponent(c.id)}/export" download="${escape(c.id)}.json">${icon("download")}Download case record</a>` : `<button class="button" id="guide-next">${icon(evaluation ? "arrow-up-right" : "folder")}${evaluation ? (evaluation.checks.every((check) => check.passed) ? "Record a decision" : "Escalate with a rationale") : "Inspect the evidence"}</button>`}<button class="text-button" id="guide-scenarios">Try another scenario ${icon("arrow-up-right")}</button></div>${decided ? `<div class="completion-next"><span>${c.evidence.length} source records · Decision history preserved · Export ready</span><button class="button primary" data-self-host>Use this workflow yourself ${icon("arrow-up-right")}</button></div>` : ""}</section>`;
+  return `<section class="practice-guide" aria-label="${escape(t("Practice guide"))}"><div class="guide-kicker">${icon("play")} ${escape(t("Guided practice"))}</div><h4>${escape(title)}</h4><p>${escape(body)}</p><div class="guide-actions">${!decided && !evaluation ? `<button class="button primary" id="guide-decide">${escape(t("Record a decision"))}</button>` : ""}${decided ? `<a class="button" href="/api/cases/${encodeURIComponent(c.id)}/export" download="${escape(c.id)}.json">${icon("download")}${escape(t("Download case record"))}</a>` : `<button class="button" id="guide-next">${icon(evaluation ? "arrow-up-right" : "folder")}${evaluation ? (evaluation.checks.every((check) => check.passed) ? t("Record a decision") : t("Escalate with a rationale")) : t("Inspect the evidence")}</button>`}<button class="text-button" id="guide-scenarios">${escape(t("Try another scenario"))} ${icon("arrow-up-right")}</button></div>${decided ? `<div class="completion-next"><span>${escape(t("{count} source records · Decision history preserved · Export ready", {count: c.evidence.length}))}</span><button class="button primary" data-self-host>${escape(t("Use this workflow yourself"))} ${icon("arrow-up-right")}</button></div>` : ""}</section>`;
 }
 async function showStart(navigate = true) {
   const version = ++requestVersion;
@@ -695,7 +699,7 @@ async function showStart(navigate = true) {
   if (navigate && location.hash !== "#start")
     history.pushState(null, "", "#start");
   $("detail").innerHTML =
-    '<div class="loading-state" role="status"><span class="loading-dot"></span> Preparing your workspace…</div>';
+    `<div class="loading-state" role="status"><span class="loading-dot"></span> ${escape(t("Preparing your workspace…"))}</div>`;
   try {
     const [catalog, health] = await Promise.all([
       api("/api/demo/scenarios"),
@@ -704,15 +708,15 @@ async function showStart(navigate = true) {
     if (version !== requestVersion) return;
     const first = catalog.scenarios.find((s) => s.id === "ready");
     $("detail").innerHTML =
-      `<div class="start-page"><div class="start-eyebrow">${icon("layers")} YOUR PRACTICE WORKSPACE</div><h2>Your first investigation.<br>A clear path to a decision.</h2><div class="workspace-personalize"><span class="mini-workspace-logo" data-workspace-logo>S</span><span><strong data-workspace-name>Acme Corp</strong><small>Your workspace, your identity</small></span><button class="button" data-personalize>Make it yours</button></div><p class="start-intro">Follow the evidence, check what is missing, and record a decision you can explain. Everything here is synthetic and ready to explore.</p><section class="first-investigation"><div class="start-card-icon">${icon("shield-check")}</div><div><div class="start-recommendation">START HERE</div><h3>Take one case all the way through</h3><p>A complete sample, a ready-to-use rationale, and a downloadable decision record.</p><ol class="start-steps"><li>Open the sample</li><li>Tab to accept</li><li>Record the decision</li></ol><button class="button primary" data-scenario="ready">${icon("play")}Start guided investigation</button><span class="start-fresh">No signup. No API key. A real practice workflow.</span><div class="first-case-secondary"><button class="text-button" data-self-host>Or run it in your own environment ${icon("arrow-up-right")}</button></div></div></section><p id="scenario-error" class="error" role="alert"></p><div class="start-section-heading"><h3>Explore the other paths</h3><span>Real actions · Predictable sample outcomes</span></div><div class="scenario-grid">${catalog.scenarios
+      `<div class="start-page"><div class="start-eyebrow">${icon("layers")} ${escape(t("YOUR PRACTICE WORKSPACE"))}</div><h2>${escape(t("Your first investigation."))}<br>${escape(t("A clear path to a decision."))}</h2><div class="workspace-personalize"><span class="mini-workspace-logo" data-workspace-logo>S</span><span><strong data-workspace-name>Acme Corp</strong><small>${escape(t("Your workspace, your identity"))}</small></span><button class="button" data-personalize>${escape(t("Make it yours"))}</button></div><p class="start-intro">${escape(t("Follow the evidence, check what is missing, and record a decision you can explain. Everything here is synthetic and ready to explore."))}</p><section class="first-investigation"><div class="start-card-icon">${icon("shield-check")}</div><div><div class="start-recommendation">${escape(t("START HERE"))}</div><h3>${escape(t("Take one case all the way through"))}</h3><p>${escape(t("A complete sample, a ready-to-use rationale, and a downloadable decision record."))}</p><ol class="start-steps"><li>${escape(t("Open the sample"))}</li><li>${escape(t("Tab to accept"))}</li><li>${escape(t("Record the decision"))}</li></ol><button class="button primary" data-scenario="ready">${icon("play")}${escape(t("Start guided investigation"))}</button><span class="start-fresh">${escape(t("No signup. No API key. A real practice workflow."))}</span><div class="first-case-secondary"><button class="text-button" data-self-host>${escape(t("Or run it in your own environment"))} ${icon("arrow-up-right")}</button></div></div></section><p id="scenario-error" class="error" role="alert"></p><div class="start-section-heading"><h3>${escape(t("Explore the other paths"))}</h3><span>${escape(t("Real actions · Predictable sample outcomes"))}</span></div><div class="scenario-grid">${catalog.scenarios
         .filter((s) => s.id !== "ready")
         .map(
           (s) =>
-            `<button class="scenario-card" data-scenario="${escape(s.id)}"><span class="scenario-icon">${icon(s.id === "history" ? "history" : s.id.includes("evidence") ? "folder" : "flag")}</span><strong>${escape(s.title)}</strong><span>${escape(s.description)}</span><small>${escape(s.outcome)}</small><span class="scenario-open">Open fresh sample ${icon("arrow-up-right")}</span></button>`,
+            `<button class="scenario-card" data-scenario="${escape(s.id)}"><span class="scenario-icon">${icon(s.id === "history" ? "history" : s.id.includes("evidence") ? "folder" : "flag")}</span><strong>${escape(t(s.title))}</strong><span>${escape(t(s.description))}</span><small>${escape(t(s.outcome))}</small><span class="scenario-open">${escape(t("Open fresh sample"))} ${icon("arrow-up-right")}</span></button>`,
         )
         .join(
           "",
-        )}</div><div class="start-footnote">${icon("lock")}<p>${window.caseworkDemo ? (window.caseworkDemo.storageAvailable ? "Practice stays in this tab, expires after two hours on your next action, and can be reset at any time. Nothing you enter is sent to our server." : "Browser storage is unavailable. Practice lasts until this page reloads. Nothing you enter is sent to our server.") : health.storage === "temporary" ? "This workspace is disposable. Its data is removed when the server stops." : "Your cases are saved in this workspace and kept across restarts."}<br>Samples use current timestamps, except the deliberately stale and future scenarios. No model or external data service is connected.</p></div></div>`;
+        )}</div><div class="start-footnote">${icon("lock")}<p>${window.caseworkDemo ? (window.caseworkDemo.storageAvailable ? t("Practice stays in this tab, expires after two hours on your next action, and can be reset at any time. Nothing you enter is sent to our server.") : t("Browser storage is unavailable. Practice lasts until this page reloads. Nothing you enter is sent to our server.")) : health.storage === "temporary" ? t("This workspace is disposable. Its data is removed when the server stops.") : t("Your cases are saved in this workspace and kept across restarts.")}<br>${escape(t("Samples use current timestamps, except the deliberately stale and future scenarios. No model or external data service is connected."))}</p></div></div>`;
     window.caseworkWorkspace?.apply();
     $("detail").scrollTop = 0;
     $("detail")
@@ -738,21 +742,21 @@ async function showStart(navigate = true) {
                 await loadCase(created.id);
                 if (innerWidth <= 640)
                   $("detail").scrollIntoView({ block: "start" });
-              } else toast("Practice case added to the queue.");
+              } else toast(t("Practice case added to the queue."));
             } catch (error) {
               if (version === requestVersion) {
-                $("scenario-error").textContent = error.message;
+                $("scenario-error").textContent = localizedError(error.message);
                 $("detail")
                   .querySelectorAll("[data-scenario]")
                   .forEach((b) => (b.disabled = false));
-              } else toast(error.message);
+              } else toaslocalizedError(error.message);
             }
           }),
       );
   } catch (error) {
     if (version !== requestVersion) return;
     $("detail").innerHTML =
-      `<div class="empty"><h3>We couldn't load the practice workspace</h3><p>${escape(error.message)}</p><button class="button" id="retry-start">Try again</button></div>`;
+      `<div class="empty"><h3>${escape(t("We couldn't load the practice workspace"))}</h3><p>${escape(localizedError(error.message))}</p><button class="button" id="retry-start">${escape(t("Try again"))}</button></div>`;
     $("retry-start").onclick = () => showStart(false);
   }
 }
@@ -767,15 +771,15 @@ async function initialize() {
     else await showStart(false);
   } catch (error) {
     $("cases").innerHTML =
-      '<div class="empty"><p>Could not load the queue.</p><button class="button" id="retry-queue">Try again</button></div>';
+      `<div class="empty"><p>${escape(t("Could not load the queue."))}</p><button class="button" id="retry-queue">${escape(t("Try again"))}</button></div>`;
     $("retry-queue").onclick = initialize;
-    toast(error.message);
+    toaslocalizedError(error.message);
   }
 }
 document.addEventListener("casework:notice", (event) => toast(event.detail));
 document.addEventListener("casework:exported", () =>
   toast(
-    "Case record download started. Your evidence and decision history are included.",
+    t("Case record download started. Your evidence and decision history are included."),
   ),
 );
 document.addEventListener("casework:reset", async () => {
@@ -789,7 +793,7 @@ document.addEventListener("casework:reset", async () => {
   $("search").value = "";
   $("status-filter").value = "all";
   await initialize();
-  toast("Fresh practice is ready. Your workspace appearance was kept.");
+  toast(t("Fresh practice is ready. Your workspace appearance was kept."));
 });
 initialize();
 
@@ -798,17 +802,17 @@ function setTheme(theme) {
   const dark = theme === "dark";
   $("theme-button").setAttribute(
     "aria-label",
-    `Switch to ${dark ? "light" : "dark"} appearance`,
+    t(dark ? "Switch to light appearance" : "Switch to dark appearance"),
   );
   $("theme-button").innerHTML =
     icon(dark ? "sun" : "moon") +
-    `<span>${dark ? "Light" : "Dark"} appearance</span>`;
+    `<span>${escape(t(dark ? "Light appearance" : "Dark appearance"))}</span>`;
   $("mobile-theme-button").setAttribute(
     "aria-label",
-    `Switch to ${dark ? "light" : "dark"} appearance`,
+    t(dark ? "Switch to light appearance" : "Switch to dark appearance"),
   );
   $("mobile-theme-button").title =
-    `Switch to ${dark ? "light" : "dark"} appearance`;
+    t(dark ? "Switch to light appearance" : "Switch to dark appearance");
   $("mobile-theme-button").innerHTML = icon(dark ? "sun" : "moon");
   try {
     localStorage.setItem("casework-theme", theme);
@@ -826,3 +830,17 @@ try {
 setTheme(savedTheme === "light" ? "light" : "dark");
 $("theme-button").onclick = toggleTheme;
 $("mobile-theme-button").onclick = toggleTheme;
+
+document.addEventListener("casework:language", () => {
+  window.caseworkWorkspace.apply();
+  setTheme(document.documentElement.dataset.theme);
+  renderQueue();
+  if (showingStart) showStart(false);
+  else if (current) renderDetail();
+  if ($("command-dialog").open) renderCommands();
+  if ($("decision-dialog").open && pendingAction && current) {
+    $("decision-title").textContent = t({close: "Review & close this case", escalate: "Escalate this investigation", reopen: "Reopen this investigation"}[pendingAction.action]);
+    $("decision-description").textContent = t(pendingAction.action === "close" ? "Accept the suggested rationale or write your own." : "Your rationale will be saved in the case history.");
+    updateDecisionHelp();
+  }
+});

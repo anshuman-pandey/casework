@@ -2589,3 +2589,25 @@ form > .button {
 .rationale-hint { display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:11px; color:var(--muted); margin:8px 0 16px; }
 #use-rationale[hidden],#decision-check[hidden] { display:none; }
 #reason::placeholder { opacity:0.8; }
+
+/* Native language names remain visible at every width. Allow translated copy to wrap. */
+.language-select {
+  max-width: 128px;
+  min-height: 32px;
+  padding: 4px 8px;
+  border: 1px solid var(--strong-border);
+  border-radius: 7px;
+  background: var(--raised);
+  font-size: 11px;
+}
+html:lang(ja), html:lang(zh-Hans), html:lang(zh-Hant) { line-break: strict; }
+html:lang(ja) { font-family: Inter, -apple-system, BlinkMacSystemFont, "Noto Sans CJK JP", "Hiragino Sans", "Yu Gothic", sans-serif; }
+html:lang(zh-Hans) { font-family: Inter, -apple-system, BlinkMacSystemFont, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif; }
+html:lang(zh-Hant) { font-family: Inter, -apple-system, BlinkMacSystemFont, "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; }
+.start-steps, .guide-actions, .decision-actions, .policy-head, .policy-footer { flex-wrap: wrap; }
+.nav, .button, .text-button { overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .topbar { flex-wrap: wrap; height: auto; min-height: 48px; gap: 6px; padding-block: 8px; }
+  .topbar-actions { flex-wrap: wrap; }
+  .language-select { max-width: 104px; }
+}

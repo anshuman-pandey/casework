@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Casework · Investigations</title>
+    <title data-i18n="Casework · Investigations">Casework · Investigations</title>
     <link
       rel="preload"
       href="/fonts/InterVariable.woff2"
@@ -14,13 +14,15 @@
     <script src="/theme.js"></script>
     <link rel="stylesheet" href="/style.css" />
     <script src="/version.js" defer></script>
+    <script src="/locales.js" defer></script>
+    <script src="/i18n.js" defer></script>
     <script src="/workspace.js" defer></script>
     <script src="/app.js" defer></script>
   </head>
   <body>
-    <a class="skip-link" href="#detail">Skip to investigation</a>
+    <a class="skip-link" href="#detail"><span data-i18n="Skip to investigation">Skip to investigation</span></a>
     <aside class="rail">
-      <a class="brand" href="/" aria-label="Casework home"
+      <a class="brand" href="/" aria-label="Casework home" data-i18n-aria-label="Casework home"
         ><span class="mark" aria-hidden="true"
           ><svg viewBox="0 0 28 28" fill="none">
             <path
@@ -39,55 +41,55 @@
       <button
         class="workspace"
         id="workspace-settings-button"
-        aria-label="Personalize workspace"
-        title="Personalize workspace"
+        aria-label="Personalize workspace" data-i18n-aria-label="Personalize workspace"
+        title="Personalize workspace" data-i18n-title="Personalize workspace"
       >
         <span class="avatar" data-workspace-logo>S</span>
         <div>
           <span data-workspace-name>Acme Corp</span
-          ><small id="workspace-mode">Development workspace</small>
+          ><small id="workspace-mode"><span data-i18n="Development workspace">Development workspace</span></small>
         </div>
         <span
           id="workspace-lock"
           class="workspace-lock"
-          title="Local synthetic-data workspace"
-          >Local</span
+          title="Local synthetic-data workspace" data-i18n-title="Local synthetic-data workspace"
+          ><span data-i18n="Local">Local</span></span
         >
       </button>
       <button id="command-button" class="command-trigger">
-        <span data-icon="search"></span><span>Search anything</span
+        <span data-icon="search"></span><span><span data-i18n="Search anything">Search anything</span></span
         ><kbd>⌘ K</kbd>
       </button>
-      <div class="nav-label">Workspace</div>
-      <nav aria-label="Case views">
+      <div class="nav-label"><span data-i18n="Workspace">Workspace</span></div>
+      <nav aria-label="Case views" data-i18n-aria-label="Case views">
         <button class="nav" id="start-nav">
-          <span data-icon="play"></span> Getting started
+          <span data-icon="play"></span> <span data-i18n="Getting started">Getting started</span>
         </button>
         <button class="nav active" id="all-nav">
-          <span data-icon="inbox"></span> Investigations
+          <span data-icon="inbox"></span> <span data-i18n="Investigations">Investigations</span>
           <span id="nav-count" class="count">0</span></button
         ><button class="nav" id="open-nav">
-          <span data-icon="circle"></span> Open queue</button
+          <span data-icon="circle"></span> <span data-i18n="Open queue">Open queue</span></button
         ><button class="nav" id="closed-nav">
-          <span data-icon="check-circle"></span> Closed cases
+          <span data-icon="check-circle"></span> <span data-i18n="Closed cases">Closed cases</span>
         </button>
       </nav>
       <div class="rail-bottom">
         <button
           id="theme-button"
           class="text-button"
-          aria-label="Switch to dark appearance"
+          aria-label="Switch to dark appearance" data-i18n-aria-label="Switch to dark appearance"
         >
           <span data-icon="moon"></span
-          ><span id="theme-label">Dark appearance</span></button
+          ><span id="theme-label"><span data-i18n="Dark appearance">Dark appearance</span></span></button
         ><button id="shortcuts-button" class="text-button">
-          <span data-icon="keyboard"></span>Keyboard shortcuts <kbd>?</kbd>
+          <span data-icon="keyboard"></span><span data-i18n="Keyboard shortcuts">Keyboard shortcuts</span> <kbd>?</kbd>
         </button>
         <div class="sandbox-note">
           <span class="status-dot"></span>
           <div>
-            Synthetic data only<small id="sandbox-caption"
-              >Local prototype · Apache-2.0</small
+            <span data-i18n="Synthetic data only">Synthetic data only</span><small id="sandbox-caption"
+              ><span data-i18n="Local prototype · Apache-2.0">Local prototype · Apache-2.0</span></small
             >
           </div>
         </div>
@@ -98,57 +100,65 @@
         <div class="breadcrumb">
           <span data-icon="layers"></span>
           <span data-workspace-name>Acme Corp</span> <span class="slash">/</span>
-          <strong>Investigations</strong>
+          <strong><span data-i18n="Investigations">Investigations</span></strong>
         </div>
         <div class="topbar-actions">
+          <select id="language-select" class="language-select" aria-label="Language" data-i18n-aria-label="Language" title="Language" data-i18n-title="Language">
+            <option value="en" lang="en">English</option>
+            <option value="de" lang="de">Deutsch</option>
+            <option value="es" lang="es">Español</option>
+            <option value="ja" lang="ja">日本語</option>
+            <option value="zh-Hans" lang="zh-Hans">简体中文</option>
+            <option value="zh-Hant" lang="zh-Hant">繁體中文</option>
+          </select>
           <button class="button self-host-top" id="self-host-button">
-            <span data-icon="download"></span><span>Self-host</span>
+            <span data-icon="download"></span><span data-i18n="Self-host">Self-host</span>
           </button>
           <button
             class="text-button"
             id="start-button"
-            aria-label="Open getting started"
+            aria-label="Open getting started" data-i18n-aria-label="Open getting started"
           >
             <span data-icon="play"></span
-            ><span class="command-label">Try a scenario</span>
+            ><span class="command-label"><span data-i18n="Try a scenario">Try a scenario</span></span>
           </button>
           <button
             class="icon-button"
             id="mobile-theme-button"
-            aria-label="Switch to dark appearance"
-            title="Switch to dark appearance"
+            aria-label="Switch to dark appearance" data-i18n-aria-label="Switch to dark appearance"
+            title="Switch to dark appearance" data-i18n-title="Switch to dark appearance"
           >
             <span data-icon="moon"></span></button
           ><button
             class="text-button"
             id="top-command"
-            aria-label="Open command menu"
+            aria-label="Open command menu" data-i18n-aria-label="Open command menu"
           >
             <span data-icon="search"></span
-            ><span class="command-label">Commands</span> <kbd>Ctrl / ⌘ K</kbd>
+            ><span class="command-label"><span data-i18n="Commands">Commands</span></span> <kbd>Ctrl / ⌘ K</kbd>
           </button>
         </div>
       </header>
       <section class="heading">
         <div>
-          <h1>Investigations <span class="workspace-badge">Sandbox</span></h1>
-          <p>Your queue. The evidence. A clear next step.</p>
+          <h1><span data-i18n="Investigations">Investigations</span> <span class="workspace-badge"><span data-i18n="Sandbox">Sandbox</span></span></h1>
+          <p><span data-i18n="Your queue. The evidence. A clear next step.">Your queue. The evidence. A clear next step.</span></p>
         </div>
         <button id="import-button" class="button">
-          <span data-icon="plus"></span> Import alert
+          <span data-icon="plus"></span> <span data-i18n="Import alert">Import alert</span>
         </button>
       </section>
-      <section class="metrics" aria-label="Case counts">
+      <section class="metrics" aria-label="Case counts" data-i18n-aria-label="Case counts">
         <div>
-          <span data-icon="stack"></span><span>All cases</span
+          <span data-icon="stack"></span><span><span data-i18n="All cases">All cases</span></span
           ><strong id="total">—</strong>
         </div>
-        <div><span>Open</span><strong id="open-count">—</strong></div>
+        <div><span data-i18n="Open">Open</span><strong id="open-count">—</strong></div>
         <div>
-          <span class="risk-indicator"></span><span>High source risk</span
+          <span class="risk-indicator"></span><span><span data-i18n="High source risk">High source risk</span></span
           ><strong id="high-count">—</strong>
         </div>
-        <div><span>Closed</span><strong id="closed-count">—</strong></div>
+        <div><span data-i18n="Closed">Closed</span><strong id="closed-count">—</strong></div>
       </section>
       <section class="workbench onboarding">
         <div class="queue">
@@ -158,51 +168,51 @@
               ><input
                 id="search"
                 type="search"
-                placeholder="Search cases…"
-                aria-label="Search cases"
+                placeholder="Search cases…" data-i18n-placeholder="Search cases…"
+                aria-label="Search cases" data-i18n-aria-label="Search cases"
               /><kbd>/</kbd></label
-            ><select id="status-filter" aria-label="Filter by status">
-              <option value="all">All statuses</option>
-              <option value="open">Open</option>
-              <option value="closed">Closed</option>
-              <option value="escalated">Escalated</option>
+            ><select id="status-filter" aria-label="Filter by status" data-i18n-aria-label="Filter by status">
+              <option value="all" data-i18n="All statuses">All statuses</option>
+              <option value="open" data-i18n="Open">Open</option>
+              <option value="closed" data-i18n="Closed">Closed</option>
+              <option value="escalated" data-i18n="Escalated">Escalated</option>
             </select>
           </div>
           <div class="queue-head">
-            <span>Priority queue <span id="list-count"></span></span
-            ><span>Source risk</span>
+            <span><span data-i18n="Priority queue">Priority queue</span> <span id="list-count"></span></span
+            ><span data-i18n="Source risk">Source risk</span>
           </div>
           <div id="cases" class="case-list"></div>
           <div class="queue-footer">
-            <span><kbd>J</kbd> <kbd>K</kbd> to navigate</span
-            ><span>Highest risk first</span>
+            <span><kbd>J</kbd> <kbd>K</kbd> <span data-i18n="to navigate">to navigate</span></span
+            ><span data-i18n="Highest risk first">Highest risk first</span>
           </div>
         </div>
         <article
           id="detail"
           class="detail"
           tabindex="-1"
-          aria-label="Investigation record"
+          aria-label="Investigation record" data-i18n-aria-label="Investigation record"
         >
-          <p class="empty">Preparing your workspace…</p>
+          <p class="empty"><span data-i18n="Preparing your workspace…">Preparing your workspace…</span></p>
         </article>
       </section>
       <footer>
         <span
           ><span class="status-dot"></span>
-          <span id="runtime-label">Local workspace</span></span
+          <span id="runtime-label"><span data-i18n="Local workspace">Local workspace</span></span></span
         ><span
-          ><span id="runtime-note">Synthetic data · No AI model connected</span>
+          ><span id="runtime-note"><span data-i18n="Synthetic data · No AI model connected">Synthetic data · No AI model connected</span></span>
           · <span data-release></span
         ></span>
       </footer>
     </main>
-    <dialog id="command-dialog" aria-label="Search and commands">
+    <dialog id="command-dialog" aria-label="Search and commands" data-i18n-aria-label="Search and commands">
       <div class="command-input-row">
         <input
           id="command-search"
-          placeholder="Search cases or find a command…"
-          aria-label="Search commands"
+          placeholder="Search cases or find a command…" data-i18n-placeholder="Search cases or find a command…"
+          aria-label="Search commands" data-i18n-aria-label="Search commands"
           autocomplete="off"
           role="combobox"
           aria-expanded="true"
@@ -211,67 +221,66 @@
         /><button
           class="text-button"
           id="close-command"
-          aria-label="Close command menu"
+          aria-label="Close command menu" data-i18n-aria-label="Close command menu"
         >
           <kbd>Esc</kbd>
         </button>
       </div>
-      <div id="command-results" role="listbox" aria-label="Commands"></div>
+      <div id="command-results" role="listbox" aria-label="Commands" data-i18n-aria-label="Commands"></div>
       <div class="command-footer">
-        <span>↑ ↓ to navigate &nbsp; · &nbsp; Enter to select</span
+        <span><span data-i18n="↑ ↓ to navigate · Enter to select">↑ ↓ to navigate · Enter to select</span></span
         ><span>Casework</span>
       </div>
     </dialog>
     <dialog id="shortcuts-dialog" aria-labelledby="shortcuts-title">
       <div class="dialog-heading">
-        <h2 id="shortcuts-title">Work without losing your place</h2>
+        <h2 id="shortcuts-title"><span data-i18n="Work without losing your place">Work without losing your place</span></h2>
         <button
           class="icon-button"
           id="close-shortcuts"
-          aria-label="Close shortcuts"
+          aria-label="Close shortcuts" data-i18n-aria-label="Close shortcuts"
           data-icon="x"
         ></button>
       </div>
       <dl class="shortcut-list">
         <div>
-          <dt>Search cases and commands</dt>
+          <dt><span data-i18n="Search cases and commands">Search cases and commands</span></dt>
           <dd><kbd>Ctrl / ⌘ K</kbd></dd>
         </div>
         <div>
-          <dt>Focus case search</dt>
+          <dt><span data-i18n="Focus case search">Focus case search</span></dt>
           <dd><kbd>/</kbd></dd>
         </div>
         <div>
-          <dt>Next / previous case</dt>
+          <dt><span data-i18n="Next / previous case">Next / previous case</span></dt>
           <dd><kbd>J</kbd> <kbd>K</kbd></dd>
         </div>
         <div>
-          <dt>Close a dialog</dt>
+          <dt><span data-i18n="Close a dialog">Close a dialog</span></dt>
           <dd><kbd>Esc</kbd></dd>
         </div>
       </dl>
       <p>
-        Shortcuts stay out of the way while you're typing. Decisions always
-        require review.
+        <span data-i18n="Shortcuts stay out of the way while you&#x27;re typing. Decisions always require review.">Shortcuts stay out of the way while you&#x27;re typing. Decisions always require review.</span>
       </p>
     </dialog>
     <div id="toast" role="status" hidden></div>
     <dialog id="import-dialog" aria-labelledby="import-title">
       <form id="import-form">
         <div class="dialog-heading">
-          <h2 id="import-title">Bring an alert into Casework</h2>
+          <h2 id="import-title"><span data-i18n="Bring an alert into Casework">Bring an alert into Casework</span></h2>
           <button
             type="button"
             class="icon-button"
             id="cancel-import"
-            aria-label="Close import dialog"
+            aria-label="Close import dialog" data-i18n-aria-label="Close import dialog"
             data-icon="x"
           ></button>
         </div>
         <p>
-          Turn an alert from your monitoring system into an investigation with evidence and decision history. Try a complete synthetic example, then edit it. Matching source IDs prevent duplicate imports.
+          <span data-i18n="Turn an alert from your monitoring system into an investigation with evidence and decision history. Try a complete synthetic example, then edit it. Matching source IDs prevent duplicate imports.">Turn an alert from your monitoring system into an investigation with evidence and decision history. Try a complete synthetic example, then edit it. Matching source IDs prevent duplicate imports.</span>
         </p>
-        <label for="import-scenario">Start from a scenario</label><select id="import-scenario"><option value="payments">Repeated supplier payments</option><option value="risk">High-risk activity</option><option value="missing">Missing screening evidence</option></select><p class="suggestion-note">Changing the scenario replaces the JSON below. Review it before importing.</p><label for="alert-json">Alert JSON</label
+        <label for="import-scenario"><span data-i18n="Start from a scenario">Start from a scenario</span></label><select id="import-scenario"><option value="payments" data-i18n="Repeated supplier payments">Repeated supplier payments</option><option value="risk" data-i18n="High-risk activity">High-risk activity</option><option value="missing" data-i18n="Missing screening evidence">Missing screening evidence</option></select><p class="suggestion-note"><span data-i18n="Changing the scenario replaces the JSON below. Review it before importing.">Changing the scenario replaces the JSON below. Review it before importing.</span></p><label for="alert-json"><span data-i18n="Alert JSON">Alert JSON</span></label
         ><textarea
           id="alert-json"
           rows="15"
@@ -279,54 +288,53 @@
           required
         ></textarea>
         <p id="import-error" class="error" role="alert"></p>
-        <button class="button primary" type="submit">Validate & import</button>
+        <button class="button primary" type="submit"><span data-i18n="Validate &amp; import">Validate &amp; import</span></button>
       </form>
     </dialog>
     <dialog id="decision-dialog" aria-labelledby="decision-title">
       <form id="decision-form">
         <div class="dialog-heading">
-          <h2 id="decision-title">Record decision</h2>
+          <h2 id="decision-title"><span data-i18n="Record decision">Record decision</span></h2>
           <button
             type="button"
             class="icon-button"
             id="cancel-decision"
-            aria-label="Cancel decision"
+            aria-label="Cancel decision" data-i18n-aria-label="Cancel decision"
             data-icon="x"
           ></button>
         </div>
         <p id="decision-description"></p>
         <p id="decision-readiness" role="status"></p>
-        <button id="decision-check" class="button" type="button" hidden>Retry check</button>
-        <label for="reason">Decision rationale</label
+        <button id="decision-check" class="button" type="button" hidden><span data-i18n="Retry check">Retry check</span></button>
+        <label for="reason"><span data-i18n="Decision rationale">Decision rationale</span></label
         ><textarea
           id="reason"
           rows="5"
           maxlength="4000"
           required
-          placeholder="Explain what you reviewed and why this action is appropriate."
+          placeholder="Explain what you reviewed and why this action is appropriate." data-i18n-placeholder="Explain what you reviewed and why this action is appropriate."
         ></textarea>
-        <div class="rationale-hint"><button type="button" class="text-button" id="use-rationale">Tab ↹ Use suggestion</button><span>Editable · Based on this sample</span></div>
+        <div class="rationale-hint"><button type="button" class="text-button" id="use-rationale"><span data-i18n="Tab ↹ Use suggestion">Tab ↹ Use suggestion</span></button><span data-i18n="Editable · Based on this sample">Editable · Based on this sample</span></div>
         <p id="decision-error" class="error" role="alert"></p>
-        <button id="save-decision" class="button primary" type="submit">Record decision</button>
+        <button id="save-decision" class="button primary" type="submit"><span data-i18n="Record decision">Record decision</span></button>
       </form>
     </dialog>
     <dialog id="workspace-dialog" aria-labelledby="workspace-title">
       <form id="workspace-form">
         <div class="dialog-heading">
-          <h2 id="workspace-title">Make this workspace yours</h2>
+          <h2 id="workspace-title"><span data-i18n="Make this workspace yours">Make this workspace yours</span></h2>
           <button
             type="button"
             class="icon-button"
             id="close-workspace"
-            aria-label="Close workspace settings"
+            aria-label="Close workspace settings" data-i18n-aria-label="Close workspace settings"
             data-icon="x"
           ></button>
         </div>
         <p>
-          A familiar workspace, with your name and logo. The layout stays
-          consistent. Appearance is saved only in this browser.
+          <span data-i18n="A familiar workspace, with your name and logo. The layout stays consistent. Appearance is saved only in this browser.">A familiar workspace, with your name and logo. The layout stays consistent. Appearance is saved only in this browser.</span>
         </p>
-        <label for="workspace-name">Business or workspace name</label
+        <label for="workspace-name"><span data-i18n="Business or workspace name">Business or workspace name</span></label
         ><input
           id="workspace-name"
           class="workspace-input"
@@ -337,27 +345,26 @@
         <div class="logo-settings">
           <span id="logo-preview" class="logo-preview"></span>
           <div>
-            <label for="workspace-logo">Workspace logo</label
+            <label for="workspace-logo"><span data-i18n="Workspace logo">Workspace logo</span></label
             ><input
               type="file"
               id="workspace-logo"
               accept="image/png,image/jpeg,image/webp"
             /><button class="text-button" type="button" id="remove-logo">
-              Remove logo
+              <span data-i18n="Remove logo">Remove logo</span>
             </button>
           </div>
         </div>
         <p id="workspace-error" role="alert" class="error"></p>
-        <button class="button primary" type="submit">Save workspace</button>
+        <button class="button primary" type="submit"><span data-i18n="Save workspace">Save workspace</span></button>
         <div class="settings-transfer">
-          <strong>Take this look with you</strong>
+          <strong><span data-i18n="Take this look with you">Take this look with you</span></strong>
           <p>
-            Export the saved appearance and import it into your self-hosted
-            workspace.
+            <span data-i18n="Export the saved appearance and import it into your self-hosted workspace.">Export the saved appearance and import it into your self-hosted workspace.</span>
           </p>
           <button class="button" type="button" id="export-workspace">
-            Export workspace appearance</button
-          ><label for="import-workspace">Import appearance JSON</label
+            <span data-i18n="Export workspace appearance">Export workspace appearance</span></button
+          ><label for="import-workspace"><span data-i18n="Import appearance JSON">Import appearance JSON</span></label
           ><input
             type="file"
             id="import-workspace"
@@ -365,40 +372,37 @@
           />
         </div>
         <button type="button" class="text-button" id="reset-practice" hidden>
-          Reset practice cases…
+          <span data-i18n="Reset practice cases…">Reset practice cases…</span>
         </button>
       </form>
     </dialog>
     <dialog id="reset-dialog" aria-labelledby="reset-title">
       <div class="dialog-heading">
-        <h2 id="reset-title">Start fresh practice?</h2>
+        <h2 id="reset-title"><span data-i18n="Start fresh practice?">Start fresh practice?</span></h2>
       </div>
       <p>
-        This removes this tab’s practice cases and rationale drafts. Export any
-        records you want to keep first. Your workspace name and logo stay.
+        <span data-i18n="This removes this tab’s practice cases and rationale drafts. Export any records you want to keep first. Your workspace name and logo stay.">This removes this tab’s practice cases and rationale drafts. Export any records you want to keep first. Your workspace name and logo stay.</span>
       </p>
       <p class="error" id="reset-error" role="alert"></p>
       <div class="guide-actions">
-        <button class="button" id="cancel-reset">Keep my cases</button
+        <button class="button" id="cancel-reset"><span data-i18n="Keep my cases">Keep my cases</span></button
         ><button class="button primary" id="confirm-reset">
-          Reset this sandbox
+          <span data-i18n="Reset this sandbox">Reset this sandbox</span>
         </button>
       </div>
     </dialog>
     <dialog id="self-host-dialog" aria-labelledby="self-host-title">
       <div class="dialog-heading">
-        <h2 id="self-host-title">This workspace. Your environment.</h2>
+        <h2 id="self-host-title"><span data-i18n="This workspace. Your environment.">This workspace. Your environment.</span></h2>
         <button
           class="icon-button"
           id="close-self-host"
-          aria-label="Close self-host guide"
+          aria-label="Close self-host guide" data-i18n-aria-label="Close self-host guide"
           data-icon="x"
         ></button>
       </div>
-      <p>
-        Download <strong id="host-version"></strong>, extract the source, and
-        run this command inside the folder with Docker Compose installed.
-      </p>
+      <p><strong id="host-version"></strong></p>
+      <p><span data-i18n="Download this version, extract the source, and run this command inside the folder with Docker Compose installed.">Download this version, extract the source, and run this command inside the folder with Docker Compose installed.</span></p>
       <pre
         class="install-command"
       ><code>docker compose up -d --build --wait</code></pre>
@@ -409,22 +413,18 @@
           href="https://github.com/anshuman-pandey/casework/releases"
           target="_blank"
           rel="noopener noreferrer"
-          >Download this version</a
+          ><span data-i18n="Download this version">Download this version</span></a
         ><button class="button" id="copy-start-command">
-          Copy Docker command
+          <span data-i18n="Copy Docker command">Copy Docker command</span>
         </button>
       </div>
-      <p>
-        Open <strong>http://127.0.0.1:8080</strong>. Your cases persist in a
-        Docker volume. Prefer Python 3.12+? Run
-        <code>python3 -m casework --demo</code> for a disposable workspace.
-      </p>
+      <p><span data-i18n="Open http://127.0.0.1:8080. Your cases persist in a Docker volume.">Open http://127.0.0.1:8080. Your cases persist in a Docker volume.</span></p>
+      <p><span data-i18n="Prefer Python 3.12+? Use this command for a disposable workspace:">Prefer Python 3.12+? Use this command for a disposable workspace:</span></p>
+      <pre class="install-command"><code>python3 -m casework --demo</code></pre>
       <div class="hosting-note">
-        <strong>Developer preview · synthetic data only</strong>
+        <strong><span data-i18n="Developer preview · synthetic data only">Developer preview · synthetic data only</span></strong>
         <p>
-          The self-hosted app validates decisions in Python and stores them in
-          SQLite. The public demo executes checks in your browser. Neither
-          includes real AI agents or production team authentication.
+          <span data-i18n="The self-hosted app validates decisions in Python and stores them in SQLite. The public demo executes checks in your browser. Neither includes real AI agents or production team authentication.">The self-hosted app validates decisions in Python and stores them in SQLite. The public demo executes checks in your browser. Neither includes real AI agents or production team authentication.</span>
         </p>
       </div>
       <a
@@ -432,7 +432,7 @@
         href="https://github.com/anshuman-pandey/casework/blob/main/docs/self-hosting.md"
         target="_blank"
         rel="noopener noreferrer"
-        >Read the complete hosting guide ↗</a
+        ><span data-i18n="Read the complete hosting guide ↗">Read the complete hosting guide ↗</span></a
       >
     </dialog>
   </body>

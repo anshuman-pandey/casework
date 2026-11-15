@@ -30,6 +30,7 @@ jobs:
       - run: node tests/demo-store.cjs
       - run: npm test
       - run: node tests/demo-browser.cjs
+      - run: node tests/i18n-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

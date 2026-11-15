@@ -37,7 +37,7 @@ def build(output):
     (output/'demo-data.js').write_text('globalThis.CASEWORK_DEMO_FIXTURES = '+json.dumps({'scenarios':SCENARIOS,'templates':templates,'seeds':seeds,'version':version})+';\n')
     (output/'build-info.json').write_text(json.dumps({'version':version,'source_commit':commit,'mode':'browser-sandbox'},indent=2)+'\n')
     html=(output/'index.html').read_text().replace('<script src="/version.js" defer></script>','<script src="/demo-data.js" defer></script><script src="/demo-store.js" defer></script><script src="/demo-browser.js" defer></script><script src="/version.js" defer></script>')
-    html=html.replace('<title>Casework · Investigations</title>', '<title>Try Casework — Open-source AML case management</title><meta name="description" content="Try a fraud and AML investigation in a private browser sandbox. Inspect evidence, record a decision, export the history, then self-host Casework.">')
+    html=html.replace('</title>', '</title><meta name="description" content="Try a fraud and AML investigation in a private browser sandbox. Inspect evidence, record a decision, export the history, then self-host Casework.">')
     (output/'index.html').write_text(html)
     (output/'_headers').write_text("/*\n  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Content-Type-Options: nosniff\n")
     print(f'Built browser sandbox {version}: {output}')

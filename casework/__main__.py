@@ -77,6 +77,8 @@ def make_handler(store, temporary=False):
                     return self.send(200, store.get(parts[2]))
                 assets = {"/": ("index.html", "text/html; charset=utf-8"),
                           "/app.js": ("app.js", "text/javascript; charset=utf-8"),
+                          "/i18n.js": ("i18n.js", "text/javascript; charset=utf-8"),
+                          "/locales.js": ("locales.js", "text/javascript; charset=utf-8"),
                           "/workspace.js": ("workspace.js", "text/javascript; charset=utf-8"),
                           "/version.js": ("version.js", "text/javascript; charset=utf-8"),
                           "/theme.js": ("theme.js", "text/javascript; charset=utf-8"),

@@ -23,6 +23,8 @@ Start a guided case, inspect its sources, record your decision and download the 
 
 Practice records stay in your browser session. The demo uses the same interface as the self-hosted app, with browser-local storage instead of SQLite. [Demo details and limits](docs/live-demo.md).
 
+**Languages:** English · Deutsch · Español · 日本語 · 简体中文 · 繁體中文. Use the language selector in the top bar; your choice is remembered. [Language support and translation contributions](docs/languages.md).
+
 ## Run it on your computer
 
 **You need [Python 3.12 or newer](https://www.python.org/downloads/).** No Python packages, database installation or API key is required.
@@ -122,7 +124,7 @@ Use **Ctrl/Cmd+K** for cases and commands, **/** for queue search, and **J/K** f
 
 | Available in this preview | Still to build |
 |---|---|
-| Public browser demo, optional branding, Python and Docker setup | Authenticated teams, RBAC, SSO and tenant isolation |
+| Public browser demo, six interface languages, optional branding, Python and Docker setup | Authenticated teams, RBAC, SSO and tenant isolation |
 | Cases, evidence, search and status filters over the first 500 cases | Paginated search, saved views, SLAs and assignment |
 | JSON ingestion with idempotent source IDs | CSV migration, connectors and reconciliation |
 | Deterministic, versioned policy evaluation | Model-backed investigation with cited findings |

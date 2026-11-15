@@ -1,5 +1,6 @@
 /* Workspace appearance is a browser preference, never an authorization boundary. */
 (function () {
+  const { t } = window.caseworkI18n;
   const $ = (id) => document.getElementById(id);
   const storage = () => (window.caseworkDemo ? sessionStorage : localStorage);
   const defaults = { schema: 1, name: "Acme Corp", logo: "" };
@@ -10,14 +11,14 @@
       !value.name.trim() ||
       [...value.name].length > 60
     )
-      throw new Error("Choose a workspace name between 1 and 60 characters.");
+      throw new Error(t("Choose a workspace name between 1 and 60 characters."));
     const logo = value.logo || "";
     if (
       typeof logo !== "string" ||
       logo.length > 90000 ||
       (logo && !/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(logo))
     )
-      throw new Error("Use a small PNG workspace logo.");
+      throw new Error(t("Use a small PNG workspace logo."));
     return { schema: 1, name: value.name.trim(), logo };
   }
   let settings = { ...defaults },
@@ -39,18 +40,18 @@
       } else el.textContent = settings.name.slice(0, 1).toUpperCase();
     });
     $("workspace-mode").textContent = window.caseworkDemo
-      ? "Private browser demo"
-      : "Development workspace";
-    $("workspace-lock").textContent = window.caseworkDemo ? "Demo" : "Local";
+      ? t("Private browser demo")
+      : t("Development workspace");
+    $("workspace-lock").textContent = window.caseworkDemo ? t("Demo") : t("Local");
     $("runtime-label").textContent = window.caseworkDemo
-      ? "Private browser sandbox"
-      : "Local workspace";
+      ? t("Private browser sandbox")
+      : t("Local workspace");
     $("runtime-note").textContent = window.caseworkDemo
-      ? "Synthetic data · Stored in this tab"
-      : "Synthetic data · No AI model connected";
+      ? t("Synthetic data · Stored in this tab")
+      : t("Synthetic data · No AI model connected");
     $("sandbox-caption").textContent = window.caseworkDemo
-      ? "Browser sandbox · Apache-2.0"
-      : "Local prototype · Apache-2.0";
+      ? t("Browser sandbox · Apache-2.0")
+      : t("Local prototype · Apache-2.0");
     $("reset-practice").hidden = !window.caseworkDemo;
     document
       .querySelectorAll("[data-release]")
@@ -62,7 +63,7 @@
     if (pendingLogo) {
       const img = document.createElement("img");
       img.src = pendingLogo;
-      img.alt = "Logo preview";
+      img.alt = t("Logo preview");
       box.append(img);
     } else
       box.textContent = ($("workspace-name").value.trim() || "S")
@@ -104,11 +105,11 @@
         !["image/png", "image/jpeg", "image/webp"].includes(file.type) ||
         file.size > 2000000
       )
-        throw new Error("Choose a PNG, JPEG or WebP image smaller than 2 MB.");
+        throw new Error(t("Choose a PNG, JPEG or WebP image smaller than 2 MB."));
       const bitmap = await createImageBitmap(file);
       if (bitmap.width > 4096 || bitmap.height > 4096) {
         bitmap.close();
-        throw new Error("Choose an image no larger than 4096 × 4096 pixels.");
+        throw new Error(t("Choose an image no larger than 4096 × 4096 pixels."));
       }
       const canvas = document.createElement("canvas");
       canvas.width = 96;
@@ -123,7 +124,7 @@
       pendingLogo = canvas.toDataURL("image/png");
       preview();
     } catch (error) {
-      $("workspace-error").textContent = error.message;
+      $("workspace-error").textContent = t(error.message);
     }
   };
   $("workspace-form").onsubmit = (event) => {
@@ -140,12 +141,12 @@
       $("workspace-dialog").close();
       document.dispatchEvent(
         new CustomEvent("casework:notice", {
-          detail: "Workspace appearance saved in this browser.",
+          detail: t("Workspace appearance saved in this browser."),
         }),
       );
     } catch (error) {
       $("workspace-error").textContent =
-        error.message || "Browser storage is unavailable.";
+        t(error.message || "Browser storage is unavailable.");
     }
   };
   $("export-workspace").onclick = () =>
@@ -155,15 +156,15 @@
       const file = $("import-workspace").files[0];
       if (!file) return;
       if (file.size > 100000)
-        throw new Error("Choose a workspace configuration under 100 KB.");
+        throw new Error(t("Choose a workspace configuration under 100 KB."));
       const value = validate(JSON.parse(await file.text()));
       $("workspace-name").value = value.name;
       pendingLogo = value.logo;
       preview();
       $("workspace-error").textContent =
-        "Configuration loaded. Save to apply it.";
+        t("Configuration loaded. Save to apply it.");
     } catch (error) {
-      $("workspace-error").textContent = error.message;
+      $("workspace-error").textContent = t(error.message);
     }
     $("import-workspace").value = "";
   };
@@ -177,7 +178,7 @@
       $("workspace-dialog").close();
       document.dispatchEvent(new Event("casework:reset"));
     } catch (error) {
-      $("reset-error").textContent = error.message;
+      $("reset-error").textContent = t(error.message);
     } finally {
       $("confirm-reset").disabled = false;
     }
@@ -199,9 +200,9 @@
       await navigator.clipboard.writeText(
         "docker compose up -d --build --wait",
       );
-      $("copy-start-command").textContent = "Copied";
+      $("copy-start-command").textContent = t("Copied");
     } catch {
-      $("copy-start-command").textContent = "Select and copy the command below";
+      $("copy-start-command").textContent = t("Select and copy the command below");
     }
   };
   window.caseworkWorkspace = {

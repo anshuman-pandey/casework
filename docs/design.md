@@ -69,3 +69,7 @@ New workspaces start in dark appearance with an editable Acme Corp name. Saved a
 ## First useful decision without mandatory writing
 
 The synthetic walkthrough offers a complete factual demonstration rationale. The decision dialog focuses its single field; Tab accepts the inline suggestion, and Record decision saves it. Checks run automatically when opening a closure, remain authoritative at submission, and never auto-close a case. A failed check exposes retry without losing the draft. Do not reintroduce mandatory bracket prompts, duplicated suggestion panels, or successful-check buttons. Optional evidence inspection and editing remain available. Import is visually secondary to the first investigation.
+
+## Language support
+
+The top bar offers English, German, Spanish, Japanese, Simplified Chinese and Traditional Chinese using their native names. Resolve the saved browser preference first, then a supported browser language, then English. Switching language updates the interface and date formatting without reloading or changing the case. Preserve drafts, expanded evidence, original source text and recorded decisions. CJK typography uses script-appropriate system fonts; no translation service or external font request is needed. Translation catalogs and placeholder validation live in `locales/` and `scripts/build_locales.py`. See [language scope and contribution instructions](languages.md).

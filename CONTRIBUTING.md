@@ -20,3 +20,5 @@ For optional browser checks, use Node 22+, run `npm ci`, then `npx playwright in
 `python3 scripts/check_container.py` verifies Docker startup, all scenarios and complete record persistence through container recreation. It creates and cleans up only its own isolated test project. GitHub Actions runs Python, browser and container checks.
 
 The [adoption review protocol](docs/adoption.md) is a useful first contribution for investigators and designers. A good report explains a specific hesitation or failed task; a good PR fixes one complete workflow.
+
+For translation improvements, see [Language support](docs/languages.md). Edit the JSON catalog for the relevant locale, rebuild with `python3 scripts/build_locales.py`, and run `node tests/i18n-browser.cjs`. Native-speaker review of investigation terminology is especially welcome.
