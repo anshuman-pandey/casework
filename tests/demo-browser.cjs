@@ -248,9 +248,9 @@ const { execFileSync } = require("node:child_process");
     await page
       .getByRole("heading", { name: "This workspace. Your environment." })
       .waitFor();
-    assert.match(
+    assert.equal(
       await page.locator("#version-download").getAttribute("href"),
-      /v0\.2\.0-preview\.3\.zip$/,
+      `https://github.com/anshuman-pandey/casework/archive/refs/tags/v${fs.readFileSync(path.join(root, "VERSION"), "utf8").trim()}.zip`,
     );
     await page.getByRole("button", { name: "Close self-host guide" }).click();
     await page.locator("#toast").waitFor({ state: "hidden" });
